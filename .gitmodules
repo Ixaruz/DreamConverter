@@ -1,0 +1,3 @@
+[submodule "libs/LibACNH"]
+	path = libs/LibACNH
+	url = https://github.com/Slattz/LibACNH
