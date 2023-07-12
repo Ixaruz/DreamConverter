@@ -4,7 +4,7 @@
 
 convert_dream::convert_dream(fs::path &template_path, fs::path &dream_path) {
     player_count = savefile::read_player_count(dream_path);
-    cout << "player_count: "<< player_count << endl;
+    //cout << "player_count: "<< player_count << endl;
 
     fs::path dream_file_path = fs::path(dream_path / "dreamdownload.dat");
 
@@ -17,7 +17,7 @@ convert_dream::convert_dream(fs::path &template_path, fs::path &dream_path) {
 
     template_check::result res = tc.check_template_files();
 
-    cout << "Template Error: " << (int)res.error_type << endl << res.additional_info << endl;
+    //cout << "Template Error: " << (int)res.error_type << endl << res.additional_info << endl;
 
     if(res.error_type == template_check::error::none) {
         fs::path out_path = dream_path / "save";
@@ -27,7 +27,7 @@ convert_dream::convert_dream(fs::path &template_path, fs::path &dream_path) {
 
         savefile::decrypt_batch(template_path, out_path, g_players);
 
-        cout << "decrypted!" << endl;
+        //cout << "decrypted!" << endl;
 
         copy_data(out_path, dream_file_path);
 
@@ -44,7 +44,7 @@ void convert_dream::copy_data(fs::path &out_path, fs::path &dream_file_path) {
     fs::path out_main_path(out_path / "main.dat");
     vector<fs::path> out_player_paths = savefile::get_player_folders(out_path, g_players);
     fstream main_file, player_file, dream_file;
-    cout << out_main_path.generic_string() << endl;
+    //cout << out_main_path.generic_string() << endl;
 
     u8 *land_main_buffer = new u8[REV_200_MAIN];
     u8 *player_buffer = new u8[REV_200_PERSONAL];
@@ -68,7 +68,7 @@ void convert_dream::copy_data(fs::path &out_path, fs::path &dream_file_path) {
     u8 i = 0;
     for(fs::path &out_player_path : out_player_paths) {
         fs::path out_player_personal_path = out_player_path / "personal.dat";
-        cout << out_player_personal_path.generic_string() << endl;
+        //cout << out_player_personal_path.generic_string() << endl;
         player_file.open(out_player_personal_path, ios::in | ios::binary);
         util::read_data((ifstream &)player_file, 0, player_buffer, REV_200_PERSONAL);
         player_file.close();
