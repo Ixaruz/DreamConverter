@@ -6,23 +6,23 @@ namespace fs = std::filesystem;
 namespace savefile {
     bool load_metadata(fs::path dream_path, string &metadata)
     {
-        fs::path meta_path = dream_path / "dreammeta.txt";
+        fs::path meta_path = dream_path / "dream_land_meta.json";
         //cout << fs::absolute(meta_path) << endl;
         if(fs::exists(meta_path) && fs::is_regular_file(meta_path)){
             ifstream meta_data_file(meta_path);
             stringstream buffer;
             buffer << meta_data_file.rdbuf();
             metadata = buffer.str();
+            meta_data_file.close();
             return true;
         }
         return false;
     }
 
-    size_t read_player_count(fs::path dream_path)
-    {
+    u32 read_32_from_metadata(fs::path dream_path, string name){
         string metadata;
         if(load_metadata(dream_path, metadata)) {
-            regex rgx("'mMtPlayerVillagersNum': (\\d{1,2})");
+            regex rgx("[\'\"]" + name + "[\'\"]: (\\d+)");
 
             smatch matches;
 
@@ -30,13 +30,43 @@ namespace savefile {
                 return stoi(matches[1].str());
             } 
             else {
-                cout << "Player Count not found in metadata" << endl;
+                cout << "name not found in metadata" << endl;
             }
         }
         else {
         cout << "metadata not found" << endl;
         }
         return 0;
+    }
+
+    string read_string_from_metadata(fs::path dream_path, string name){
+        string metadata;
+        if(load_metadata(dream_path, metadata)) {
+            regex rgx("[\'\"]" + name + "[\'\"]: '([[:graph:]]+)'");
+
+            smatch matches;
+
+            if(regex_search(metadata, matches, rgx)) {
+                return matches[1].str();
+            } 
+            else {
+                cout << "name not found in metadata" << endl;
+            }
+        }
+        else {
+        cout << "metadata not found" << endl;
+        }
+        return 0;
+    }
+
+    size_t read_player_count(fs::path dream_path)
+    {
+        return (size_t)read_32_from_metadata(dream_path, "mMtPlayerVillagersNum");
+    }
+
+    string read_island_name(fs::path dream_path)
+    {
+        return read_string_from_metadata(dream_path, "mMtVNm");
     }
 
     bool is_file_size(fs::path file, size_t size)
@@ -134,6 +164,7 @@ namespace savefile {
         {
             if(fs::is_directory(dir_entry)){
                 string folder_name = util::get_folder_name(dir_entry.path());
+                //matches the digits in Villager0 to Villager7
                 regex rgx("[a-zA-Z]+(\\d)");
                 smatch matches;
                 //if its a player that needs to be dumped
@@ -215,5 +246,12 @@ namespace savefile {
             }
         }
         return player_folders;
+    }
+
+    int check_file_header_info_compatibility(revision_checker::file_header_info info_1, revision_checker::file_header_info info_2){
+        int difference = (info_1.major - info_2.major);
+        if(difference < 0) return -1;
+        if(difference > 0) return 1;
+        return 0;
     }
 }

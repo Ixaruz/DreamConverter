@@ -9,12 +9,77 @@
 #include <iostream>
 #include <map>
 #include <types.hpp>
+#include <MurmurHash3.hpp>
 
 using namespace std;
 namespace fs = std::filesystem;
 
 const s32 DreamHeaderSize = 0x830;
 const s32 SaveHeaderSize = 0x110;
+const s32 dream_header_difference = DreamHeaderSize - SaveHeaderSize;
+
+
+const u32 EventFlagsSaveCount = 0x400;
+
+const u32 main_field_type =     MurmurHash3::Calc_CEval("::Game::SaveMain");
+const u32 personal_field_type = MurmurHash3::Calc_CEval("::Game::SavePlayer");
+
+const vector<vector<u32>> main_fields_to_copy {
+    //changed in 1.1.0 (+0x10); -> alignment change; size of _d35a9251 changed from 0x4 (w Alignment !!!!0x8!!!!) to 0x8 (w Alignment !!!!0x10!!!!); NpcVillager(what we're interested in) didnt change; (due to alignment there are 0x8 more bytes afterwards)
+    //1.5.0 (bigger change); -> type "Animal" grew by 0x780 (160 LightMemories; added ClothesPTops and some other stuff (what item did someone wear when they visited???); size 0x8 w Alignment 0xC); effective size increase: 0x780 * 24 = 0xB400
+    //1.10.0(+0x10), -> added "BirthdayPlantFtr" at the end (8 byte * 2); we can ignore this
+    //2.0.0(another bigger change) -> NpcArchive went from count 400 to 420 (blaze it) (0x1220); added "BirthdayAudioFtr" (8 bytes) and "BirthdayLampFtr" (8 bytes)
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("Npc"), MurmurHash3::Calc_CEval("NpcVillager")}, //don't fit //handled by save_npc.hpp
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("PlayerVillagerAccountTable")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("Weather")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("LandTime")}, //don't fit //handled by save_land_time.hpp //changed in 2.0.0
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("LandId")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("LandMyDesign")}, //don't fit //handled by save_land_my_design.hpp //changed in 1.9.0
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("MainField")}, //don't fit //handled by save_main_field.hpp //changed in 2.0.0
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("PlayerHouseList")}, //don't fit //handled by save_player_house_list.hpp //changed in 2.0.0
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("NpcHouseList")}, //don't fit //handled by save_npc_house_list.hpp //changed in 2.0.0
+    /*{MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("Shop")},*/ //don't fit // all shops changed size; exception: ShopKabu; added ShopGardening, ShopGallery, ShopCommune //changed in 1.2.0; 1.5.0; 1.6.0; 1.7.0; 1.9.0; 2.0.0
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("Museum")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("VisitorNpc")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("SnowManFamily")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("Fg")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("ItemMarketingRoute")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("VillageMelody")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("Office")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("BulletinBoard")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("RegionLanguage")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("CalendarEventRegion")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("CampSite")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("NpcCamp")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("AirportThemeColor")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("RumorFavorite")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("PublicWorksLoan")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("PublicWorksName")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("VillageScore")}, //fits
+    /*{MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("NetLandProfile")},*/ //fits (after 1.4.0 aka dream update) //dont copy this
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("SettlerQuest")}, //introduced in 1.4.0 for some bizarro reason?
+};
+
+const vector<vector<u32>> personal_fields_to_copy {
+    {MurmurHash3::Calc_CEval("Player"), 3545928273 /*_d35a9251*/ /*Code : u32*/},
+    {MurmurHash3::Calc_CEval("Player"), 419281215 /*_d35a9251*/ /*s8*/},
+    {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("LookPack")},
+    {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("PlayerId")},
+    {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("EventFlag")},
+    //added 0x200 * 6 "OpenProfile" (can be ignored)
+    {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("LifeSupport")}, //don't fit //changed in 1.5.0; size += 0xC00
+    {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("BirthDay")},
+    {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("PastDaysFromMade")},
+    /*{MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("NetProfile")},*/ //don't fit //changed in 2.0.0; size += 0x2
+    {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("ProfileMain")},
+    {MurmurHash3::Calc_CEval("Player"), 1562364676 /*_5d1fcb04*/ /*u8*/},
+    {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("LastPlayDate")},
+    {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("LastBirthdayYear")},
+    {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("BirthdayLiveDate")},
+    {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("BirthdayLiveMsgList")},
+    {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("GalleryLandId")},
+    /*{MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("PreviousLandId")},*/ //don't fit //introduced in 1.5.0
+};
 
 const u32 mainSize = 0x547520 - SaveHeaderSize; //changed in 2.0.0 // GSaveLandOther - Header
 const u32 GSavePlayerVillagerAccountOffset = 0x1E34C0 - SaveHeaderSize; //changed in 2.0.0
@@ -169,19 +234,19 @@ const map<u16, u16> dream_player_event_flags_collect_item_map = {
 };
 
 const u32 storage_sizes[] = {
-        0,
-        80,
-        120,
-        240,
-        320,
-        400,
-        800,
-        1600,
-        2400,
-        3200,
-        4000,
-        5000
-    };
+    0,
+    80,
+    120,
+    240,
+    320,
+    400,
+    800,
+    1600,
+    2400,
+    3200,
+    4000,
+    5000
+};
 
 namespace util
 {
