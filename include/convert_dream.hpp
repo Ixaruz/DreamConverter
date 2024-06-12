@@ -18,7 +18,7 @@ using namespace std;
 namespace fs = std::filesystem;
 class convert_dream {
 private:
-    bool g_players[8] = {false};
+    bool g_players[8]{false};
     size_t player_count = 0;
     fs::path dream_file_path;
 
@@ -26,9 +26,17 @@ private:
     revision_checker::file_header_info dream_fhi;
     ACNHByaml *main_yaml = nullptr;
     ACNHByaml *dream_yaml = nullptr;
+    u32 main_size = NULL;
+    u32 dream_main_size = NULL;
+    u32 player_size = NULL;
+    u32 dream_player_size = NULL;
     u32 event_flag_land_offset = NULL;
+    u32 dream_event_flag_land_offset = NULL;
     u32 event_flag_player_offset = NULL;
+    u32 dream_event_flag_player_offset = NULL;
     u32 speciality_fruit_offset = NULL;
+    u32 dream_speciality_fruit_offset = NULL;
+    // PlayerOther (not available in dream)
     u32 item_collect_bit_offset = NULL;
     u32 recipe_collect_bit_offset = NULL;
     u32 storage_size_offset = NULL;

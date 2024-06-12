@@ -28,7 +28,7 @@ const vector<vector<u32>> main_fields_to_copy {
     //1.10.0(+0x10), -> added "BirthdayPlantFtr" at the end (8 byte * 2); we can ignore this
     //2.0.0(another bigger change) -> NpcArchive went from count 400 to 420 (blaze it) (0x1220); added "BirthdayAudioFtr" (8 bytes) and "BirthdayLampFtr" (8 bytes)
     {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("Npc"), MurmurHash3::Calc_CEval("NpcVillager")}, //don't fit //handled by save_npc.hpp
-    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("PlayerVillagerAccountTable"), MurmurHash3::Calc_CEval("AccountTable")}, //fits
+    {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("PlayerVillagerAccountTable")/*, MurmurHash3::Calc_CEval("AccountTable")*/}, //fits
     {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("Weather")}, //fits
     {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("LandTime")}, //don't fit //handled by save_land_time.hpp //changed in 2.0.0
     {MurmurHash3::Calc_CEval("Land"), MurmurHash3::Calc_CEval("LandId")}, //fits

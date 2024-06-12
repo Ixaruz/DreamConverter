@@ -14,60 +14,89 @@ ACNHByaml *get_byaml(fs::path smmh_path, revision_checker::file_header_info fhi)
 
 void convert_dream::setup_(fs::path &executable_path) {
     main_yaml = get_byaml(executable_path.remove_filename(), main_fhi);
-    dream_yaml = get_byaml(executable_path.remove_filename(), dream_fhi);
-    event_flag_land_offset =        main_yaml->CalcOffsets(main_field_type,
+    main_size =                         main_yaml->GetSize(main_field_type,
                                                            vector<u32>({
-                                                                MurmurHash3::Calc_CEval("Land"),
-                                                                MurmurHash3::Calc_CEval("EventFlag")}));
-    event_flag_player_offset =      main_yaml->CalcOffsets(personal_field_type,
+                                                                    MurmurHash3::Calc_CEval("Land")}));
+    dream_main_size =                   dream_yaml->GetSize(main_field_type,
+                                                            vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Land")}));
+    player_size =                       main_yaml->GetSize(personal_field_type,
                                                            vector<u32>({
-                                                                MurmurHash3::Calc_CEval("Player"),
-                                                                MurmurHash3::Calc_CEval("EventFlag")}));
-    speciality_fruit_offset =       main_yaml->CalcOffsets(personal_field_type,
-                                                           vector<u32>({
-                                                                MurmurHash3::Calc_CEval("Player"),
-                                                                MurmurHash3::Calc_CEval("ProfileMain"),
-                                                                MurmurHash3::Calc_CEval("SpecialityFruit")}));
-    item_collect_bit_offset =       main_yaml->CalcOffsets(personal_field_type,
-                                                           vector<u32>({
-                                                                MurmurHash3::Calc_CEval("PlayerOther"),
-                                                                MurmurHash3::Calc_CEval("ItemCollectBit")}));
-    recipe_collect_bit_offset =     main_yaml->CalcOffsets(personal_field_type,
-                                                           vector<u32>({
-                                                                MurmurHash3::Calc_CEval("PlayerOther"),
-                                                                MurmurHash3::Calc_CEval("CraftingRecipeCollect"),
-                                                                MurmurHash3::Calc_CEval("RecipeCollectBit")}));
-    storage_size_offset =           main_yaml->CalcOffsets(personal_field_type,
-                                                           vector<u32>({
-                                                                MurmurHash3::Calc_CEval("PlayerOther"),
-                                                                MurmurHash3::Calc_CEval("ItemChest"),
-                                                                MurmurHash3::Calc_CEval("ItemHolder"),
-                                                                1281327397 /*_4c5f8125*/}));
-    pocket_1_size_offset =          main_yaml->CalcOffsets(personal_field_type,
-                                                           vector<u32>({
-                                                                MurmurHash3::Calc_CEval("PlayerOther"),
-                                                                MurmurHash3::Calc_CEval("ItemBaggage"),
-                                                                MurmurHash3::Calc_CEval("ItemBag"),
-                                                                MurmurHash3::Calc_CEval("ItemHolder"),
-                                                                1281327397 /*_4c5f8125*/}));
-    expand_baggage_offset =         main_yaml->CalcOffsets(personal_field_type,
-                                                           vector<u32>({
-                                                                MurmurHash3::Calc_CEval("PlayerOther"),
-                                                                MurmurHash3::Calc_CEval("ItemBaggage"),
-                                                                MurmurHash3::Calc_CEval("ExpandBaggage")}));
+                                                                    MurmurHash3::Calc_CEval("Player")}));
+    dream_player_size =                 dream_yaml->GetSize(personal_field_type,
+                                                            vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player")}));
+    event_flag_land_offset =            main_yaml->CalcOffsets(main_field_type,
+                                                               vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Land"),
+                                                                    MurmurHash3::Calc_CEval("EventFlag")}));
+    dream_event_flag_land_offset =      dream_yaml->CalcOffsets(main_field_type,
+                                                                vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Land"),
+                                                                    MurmurHash3::Calc_CEval("EventFlag")}));
+    event_flag_player_offset =          main_yaml->CalcOffsets(personal_field_type,
+                                                               vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("EventFlag")}));
+    dream_event_flag_player_offset =    dream_yaml->CalcOffsets(personal_field_type,
+                                                               vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("EventFlag")}));
+    speciality_fruit_offset =           main_yaml->CalcOffsets(personal_field_type,
+                                                               vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("ProfileMain"),
+                                                                    MurmurHash3::Calc_CEval("SpecialityFruit")}));
+    dream_speciality_fruit_offset =     dream_yaml->CalcOffsets(personal_field_type,
+                                                               vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("ProfileMain"),
+                                                                    MurmurHash3::Calc_CEval("SpecialityFruit")}));
+    item_collect_bit_offset =           main_yaml->CalcOffsets(personal_field_type,
+                                                               vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("PlayerOther"),
+                                                                    MurmurHash3::Calc_CEval("ItemCollectBit")}));
+    recipe_collect_bit_offset =         main_yaml->CalcOffsets(personal_field_type,
+                                                               vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("PlayerOther"),
+                                                                    MurmurHash3::Calc_CEval("CraftingRecipeCollect"),
+                                                                    MurmurHash3::Calc_CEval("RecipeCollectBit")}));
+    storage_size_offset =               main_yaml->CalcOffsets(personal_field_type,
+                                                               vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("PlayerOther"),
+                                                                    MurmurHash3::Calc_CEval("ItemChest"),
+                                                                    MurmurHash3::Calc_CEval("ItemHolder"),
+                                                                    1281327397 /*_4c5f8125*/}));
+    pocket_1_size_offset =              main_yaml->CalcOffsets(personal_field_type,
+                                                               vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("PlayerOther"),
+                                                                    MurmurHash3::Calc_CEval("ItemBaggage"),
+                                                                    MurmurHash3::Calc_CEval("ItemBag"),
+                                                                    MurmurHash3::Calc_CEval("ItemHolder"),
+                                                                    1281327397 /*_4c5f8125*/}));
+    expand_baggage_offset =             main_yaml->CalcOffsets(personal_field_type,
+                                                               vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("PlayerOther"),
+                                                                    MurmurHash3::Calc_CEval("ItemBaggage"),
+                                                                    MurmurHash3::Calc_CEval("ExpandBaggage")}));
 }
 
 convert_dream::convert_dream(fs::path &executable_path, fs::path &template_path, fs::path &dream_path) {
     player_count = savefile::read_player_count(dream_path);
     u32 revision = savefile::read_32_from_metadata(dream_path, "mAppReleaseVersion");
+    dream_fhi = revision_checker::get_revision_info_by_save_revision(revision);
+    dream_yaml = get_byaml(executable_path.remove_filename(), dream_fhi);
+    u32 dream_account_table_offset =    dream_yaml->CalcOffsets(main_field_type,
+                                                                vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Land"),
+                                                                    MurmurHash3::Calc_CEval("PlayerVillagerAccountTable")}));
 
-    fs::path dream_file_path = fs::path(dream_path / "dream_land.dat");
     ifstream dream_file;
+    fs::path dream_file_path = fs::path(dream_path / "dream_land.dat");
     dream_file.open(dream_file_path, ios::in | ios::binary);
-    savefile::check_players(dream_file, g_players);
-    // u8 *main_dream_buffer = new u8[fs::file_size(dream_file_path)];
-    // util::read_data(dream_file, 0, main_dream_buffer, fs::file_size(dream_file_path));
+    savefile::check_players(dream_file, dream_account_table_offset, g_players);
     dream_file.close();
+
     template_check::template_check tc(template_path, g_players);
 
     template_check::result res = tc.check_template_files();
@@ -75,7 +104,6 @@ convert_dream::convert_dream(fs::path &executable_path, fs::path &template_path,
     cout << "Template Error: " << (int)res.error_type << endl << res.additional_info << endl;
 
     main_fhi = tc.get_file_header_info();
-    dream_fhi = revision_checker::get_revision_info_by_save_revision(revision);
     // setup variables and shit
     this->setup_(executable_path);
 
@@ -178,11 +206,15 @@ void convert_dream::copy_data(fs::path &out_path, fs::path &dream_file_path) {
             break;
         }
         default:
+        {
+            u8 *nullbuffer = new u8[field_size]{0};
             // override with zeros first (in case the field we are writing is smaller than the input field)
-            util::write_data(main_buffer + field_offset, 0, new u8[field_size]{0}, field_size);
+            util::write_data(main_buffer + field_offset, 0, nullbuffer, field_size);
             // write as much data as we can get from the dream_buffer (min value between the two struct sizes)
             util::write_data(main_buffer + field_offset, 0, dream_buffer + dream_field_offset, min(field_size, dream_field_size));
+            delete nullbuffer;
             break;
+        }
         }
     }
     fix_main(main_buffer);
@@ -196,7 +228,7 @@ void convert_dream::copy_data(fs::path &out_path, fs::path &dream_file_path) {
         fs::path out_player_personal_path = out_player_path / "personal.dat";
         //cout << out_player_personal_path.generic_string() << endl;
         player_file.open(out_player_personal_path, ios::in | ios::binary);
-        util::read_data((ifstream &)player_file, 0, player_buffer, REV_200_PERSONAL);
+        util::read_data((ifstream &)player_file, 0, player_buffer, player_file_size);
         player_file.close();
 
         for(vector<u32> field : personal_fields_to_copy) {
@@ -204,22 +236,32 @@ void convert_dream::copy_data(fs::path &out_path, fs::path &dream_file_path) {
             u64 field_offset = main_yaml->CalcOffsets(personal_field_type, field);
             u64 field_size = main_yaml->GetSize(personal_field_type, field);
             printf("field offset: 0x%lX field size: 0x%lX\n", field_offset, field_size);
-            u64 dream_field_offset = dream_yaml->CalcOffsets(personal_field_type, field) + dream_header_difference;
+            u64 dream_field_offset = dream_yaml->CalcOffsets(personal_field_type, field) + dream_header_difference + dream_main_size + (i * dream_player_size);
             u64 dream_field_size = dream_yaml->GetSize(personal_field_type, field);
             printf("dream field offset: 0x%lX dream field size: 0x%lX\n------------------------\n", dream_field_offset, dream_field_size);
 
+            u8 *nullbuffer = new u8[field_size]{0};
             // override with zeros first (in case the field we are writing is smaller than the input field)
-            util::write_data(player_buffer + field_offset, 0, new u8[field_size]{0}, field_size);
+            util::write_data(player_buffer + field_offset, 0, nullbuffer, field_size);
             // write as much data as we can get from the dream_buffer (min value between the two struct sizes)
             util::write_data(player_buffer + field_offset, 0, dream_buffer + dream_field_offset, min(field_size, dream_field_size));
-            break;
+            delete nullbuffer;
         }
-        // u8 house_level = 0;
-        // util::read_data(main_buffer, save_header_size + houseLvlOffset +  (i * houseSize), &house_level, sizeof(house_level));
-        //fix_player(player_buffer, dream_buffer + mainSize + (playerSize * i), house_level);
+        u8 house_level = 0;
+        u32 house_lvl_offset =  main_yaml->CalcOffsets(main_field_type,
+                                                       vector<u32>({
+                                                            MurmurHash3::Calc_CEval("Land"),
+                                                            MurmurHash3::Calc_CEval("PlayerHouseList")}));
+        u32 house_size =        main_yaml->GetSize(main_field_type,
+                                                   vector<u32>({
+                                                            MurmurHash3::Calc_CEval("Land"),
+                                                            MurmurHash3::Calc_CEval("PlayerHouseList"),
+                                                            MurmurHash3::Calc_CEval("HouseList")})); // this only gives us the size of ONE element so its fine
+        util::read_data(main_buffer, house_lvl_offset +  (i * house_size), &house_level, sizeof(house_level));
+        fix_player(player_buffer, dream_buffer + dream_header_difference + dream_main_size + (i * dream_player_size), house_level);
 
         player_file.open(out_player_personal_path, ios::out | ios::binary);
-        util::write_data((ofstream &)player_file, 0, player_buffer, REV_200_PERSONAL);
+        util::write_data((ofstream &)player_file, 0, player_buffer, player_file_size);
         player_file.close();
     }
 }
@@ -284,7 +326,7 @@ void convert_dream::fix_player(void *player_buffer, void *dream_player_buffer, u
     map<u16, u16> event_flags_map;
     for (auto const & event_flag : dream_player_event_flags) {
         event_flags_map[event_flag] = 0;
-        util::read_data(dream_player_buffer, event_flag_player_offset + (event_flag * 2), &event_flags_map[event_flag], sizeof(u16));
+        util::read_data(dream_player_buffer, dream_event_flag_player_offset + (event_flag * 2), &event_flags_map[event_flag], sizeof(u16));
         if(dream_player_event_flags_collect_item_map.find(event_flag) != dream_player_event_flags_collect_item_map.end()){
             edit_item_collect_bit(player_buffer, dream_player_event_flags_collect_item_map.find(event_flag)->second, event_flags_map[event_flag]);
         }

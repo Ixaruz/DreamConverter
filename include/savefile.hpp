@@ -30,7 +30,7 @@ namespace savefile {
 
     void encrypt_batch(fs::path in_path, fs::path out_path, u32 tick);
 
-    void check_players(ifstream &dream_file, bool *g_players);
+    void check_players(ifstream &dream_file, u32 account_offset, bool *g_players);
 
     vector<fs::path> get_player_folders(fs::path folder, bool *g_players);
 
