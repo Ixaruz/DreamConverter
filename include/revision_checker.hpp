@@ -11,7 +11,7 @@ namespace revision_checker{
         u32 PhotoStudioIsland;
         u32 PostBox;
         u32 Profile;
-        u32 WhereAreN;
+        u32 WhereAreN = 0;
     };
 
     static std::vector<save_file_sizes*> sizes_by_revision = std::vector<save_file_sizes*>
@@ -41,42 +41,42 @@ namespace revision_checker{
     } file_header_info;
 
     //we dont support anything before 1.4.0 (dream update)
-    static std::vector<file_header_info*> revision_info = std::vector<file_header_info*>
+    static std::vector<file_header_info> revision_info = std::vector<file_header_info>
     {
         /*
-        new file_header_info { 0x00067, 0x0006F, 2, 0, 2,  0 }, // 1.0.0
-        new file_header_info { 0x0006D, 0x00078, 2, 0, 2,  1 }, // 1.1.0
-        new file_header_info { 0x0006D, 0x00078, 2, 0, 2,  2 }, // 1.1.1
-        new file_header_info { 0x0006D, 0x00078, 2, 0, 2,  3 }, // 1.1.2
-        new file_header_info { 0x0006D, 0x00078, 2, 0, 2,  4 }, // 1.1.3
-        new file_header_info { 0x0006D, 0x00078, 2, 0, 2,  5 }, // 1.1.4
-        new file_header_info { 0x20006, 0x20008, 2, 0, 2,  6 }, // 1.2.0
-        new file_header_info { 0x20006, 0x20008, 2, 0, 2,  7 }, // 1.2.1
-        new file_header_info { 0x40002, 0x40008, 2, 0, 2,  8 }, // 1.3.0
-        new file_header_info { 0x40002, 0x40008, 2, 0, 2,  9 }, // 1.3.1
+        file_header_info { 0x00067, 0x0006F, 2, 0, 2,  0 }, // 1.0.0
+        file_header_info { 0x0006D, 0x00078, 2, 0, 2,  1 }, // 1.1.0
+        file_header_info { 0x0006D, 0x00078, 2, 0, 2,  2 }, // 1.1.1
+        file_header_info { 0x0006D, 0x00078, 2, 0, 2,  3 }, // 1.1.2
+        file_header_info { 0x0006D, 0x00078, 2, 0, 2,  4 }, // 1.1.3
+        file_header_info { 0x0006D, 0x00078, 2, 0, 2,  5 }, // 1.1.4
+        file_header_info { 0x20006, 0x20008, 2, 0, 2,  6 }, // 1.2.0
+        file_header_info { 0x20006, 0x20008, 2, 0, 2,  7 }, // 1.2.1
+        file_header_info { 0x40002, 0x40008, 2, 0, 2,  8 }, // 1.3.0
+        file_header_info { 0x40002, 0x40008, 2, 0, 2,  9 }, // 1.3.1
         */
-        new file_header_info { 0x50001, 0x5000B, 2, 0, 2, 10 }, // 1.4.0
-        new file_header_info { 0x50001, 0x5000B, 2, 0, 2, 11 }, // 1.4.1
-        new file_header_info { 0x50001, 0x5000B, 2, 0, 2, 12 }, // 1.4.2
-        new file_header_info { 0x60001, 0x6000C, 2, 0, 2, 13 }, // 1.5.0
-        new file_header_info { 0x60001, 0x6000C, 2, 0, 2, 14 }, // 1.5.1
-        new file_header_info { 0x70001, 0x70006, 2, 0, 2, 15 }, // 1.6.0
-        new file_header_info { 0x74001, 0x74005, 2, 0, 2, 16 }, // 1.7.0
-        new file_header_info { 0x78001, 0x78001, 2, 0, 2, 17 }, // 1.8.0
-        new file_header_info { 0x7C001, 0x7C006, 2, 0, 2, 18 }, // 1.9.0
-        new file_header_info { 0x7D001, 0x7D004, 2, 0, 2, 19 }, // 1.10.0
-        new file_header_info { 0x7E001, 0x7E001, 2, 0, 2, 20 }, // 1.11.0
-        new file_header_info { 0x7E001, 0x7E001, 2, 0, 2, 21 }, // 1.11.1
-        new file_header_info { 0x80009, 0x80085, 2, 0, 2, 22 }, // 2.0.0
-        new file_header_info { 0x80009, 0x80085, 2, 0, 2, 23 }, // 2.0.1
-        new file_header_info { 0x80009, 0x80085, 2, 0, 2, 24 }, // 2.0.2
-        new file_header_info { 0x80009, 0x80085, 2, 0, 2, 25 }, // 2.0.3
-        new file_header_info { 0x80009, 0x80085, 2, 0, 2, 26 }, // 2.0.4
-        new file_header_info { 0x80009, 0x80085, 2, 0, 2, 27 }, // 2.0.5
-        new file_header_info { 0x80009, 0x80085, 2, 0, 2, 28 }, // 2.0.6
+        file_header_info { 0x50001, 0x5000B, 2, 0, 2, 10 }, // 1.4.0
+        file_header_info { 0x50001, 0x5000B, 2, 0, 2, 11 }, // 1.4.1
+        file_header_info { 0x50001, 0x5000B, 2, 0, 2, 12 }, // 1.4.2
+        file_header_info { 0x60001, 0x6000C, 2, 0, 2, 13 }, // 1.5.0
+        file_header_info { 0x60001, 0x6000C, 2, 0, 2, 14 }, // 1.5.1
+        file_header_info { 0x70001, 0x70006, 2, 0, 2, 15 }, // 1.6.0
+        file_header_info { 0x74001, 0x74005, 2, 0, 2, 16 }, // 1.7.0
+        file_header_info { 0x78001, 0x78001, 2, 0, 2, 17 }, // 1.8.0
+        file_header_info { 0x7C001, 0x7C006, 2, 0, 2, 18 }, // 1.9.0
+        file_header_info { 0x7D001, 0x7D004, 2, 0, 2, 19 }, // 1.10.0
+        file_header_info { 0x7E001, 0x7E001, 2, 0, 2, 20 }, // 1.11.0
+        file_header_info { 0x7E001, 0x7E001, 2, 0, 2, 21 }, // 1.11.1
+        file_header_info { 0x80009, 0x80085, 2, 0, 2, 22 }, // 2.0.0
+        file_header_info { 0x80009, 0x80085, 2, 0, 2, 23 }, // 2.0.1
+        file_header_info { 0x80009, 0x80085, 2, 0, 2, 24 }, // 2.0.2
+        file_header_info { 0x80009, 0x80085, 2, 0, 2, 25 }, // 2.0.3
+        file_header_info { 0x80009, 0x80085, 2, 0, 2, 26 }, // 2.0.4
+        file_header_info { 0x80009, 0x80085, 2, 0, 2, 27 }, // 2.0.5
+        file_header_info { 0x80009, 0x80085, 2, 0, 2, 28 }, // 2.0.6
     };
 
-    inline static file_header_info* get_revision_info_by_save_revision(int revision) {
+    inline static file_header_info get_revision_info_by_save_revision(int revision) {
         return revision_info[revision - 10]; // -10 for the commented out versions
     }
 

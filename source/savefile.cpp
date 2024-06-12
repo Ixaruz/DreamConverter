@@ -28,7 +28,7 @@ namespace savefile {
 
             if(regex_search(metadata, matches, rgx)) {
                 return stoi(matches[1].str());
-            } 
+            }
             else {
                 cout << "name not found in metadata" << endl;
             }
@@ -48,7 +48,7 @@ namespace savefile {
 
             if(regex_search(metadata, matches, rgx)) {
                 return matches[1].str();
-            } 
+            }
             else {
                 cout << "name not found in metadata" << endl;
             }
@@ -172,7 +172,7 @@ namespace savefile {
                     fs::path new_out_path = out_path / folder_name;
                     fs::create_directories(new_out_path);
                     decrypt_batch(dir_entry.path(), new_out_path, g_players);
-                } 
+                }
 
             }
 
@@ -231,9 +231,9 @@ namespace savefile {
 
     void check_players(ifstream &dream_file, bool *g_players) {
         for (u8 player = 0; player < 8; player++) {
-            u64 offset = player * GSavePlayerVillagerAccountSize;
+            u64 offset = player * 0x48;
             u128 account_uid = 0;
-            util::read_data(dream_file, DreamHeaderSize + GSavePlayerVillagerAccountOffset + offset, &account_uid, 0x10);
+            util::read_data(dream_file, dream_header_size + 0x48 + offset, &account_uid, 0x10);
             if (account_uid != 0) g_players[player] = true;
         }
     }

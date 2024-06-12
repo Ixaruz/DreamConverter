@@ -46,7 +46,7 @@ namespace template_check {
                 items_count++;
                 if (dir_entry.path().filename().generic_string() == "main.dat") main_found = true;
                 else if(dir_entry.path().generic_string().find("Header.dat") != string::npos) {
-                    
+
                     revision_checker::file_header_info header_file_file_header_info;
                     ifstream header_file;
                     header_file.open(dir_entry.path(), ios::in | ios::binary);
@@ -54,8 +54,8 @@ namespace template_check {
                     header_file.close();
 
                     if(!revision_found) {
-                        for (auto& r : revision_checker::revision_info) {
-                            if (memcmp(r, &header_file_file_header_info, sizeof(revision_checker::file_header_info)) == 0) {
+                        for (auto r : revision_checker::revision_info) {
+                            if (memcmp(&r, &header_file_file_header_info, sizeof(revision_checker::file_header_info)) == 0) {
                                 _file_header_info = header_file_file_header_info;
                                 revision_found = true;
                                 break;

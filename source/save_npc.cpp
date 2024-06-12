@@ -1,13 +1,27 @@
 #include <save_npc.hpp>
 
 namespace save_npc {
+    std::vector<u16> revisions =
+    {
+        12, // 1.4.2 (revision before upgrade)
+        13, //1.5.0
+        22 //2.0.0
+    };
+
+    static std::map<u16, std::function<std::unique_ptr<save_npc>(u8*)>> constructors =
+    {
+        {12, [](u8* data){ return std::make_unique<save_npc_1>(data); }},
+        {13, [](u8* data){ return std::make_unique<save_npc_2>(data); }},
+        {22, [](u8* data){ return std::make_unique<save_npc_3>(data); }}
+    };
+
     u8 const *save_npc_1::to_bin() { return m_buffer; }
     u8 const *save_npc_2::to_bin() { return m_buffer; }
     u8 const *save_npc_3::to_bin() { return m_buffer; }
 
-    int const save_npc_1::get_size() { return m_size; }
-    int const save_npc_2::get_size() { return m_size; }
-    int const save_npc_3::get_size() { return m_size; }
+    int save_npc_1::get_size() { return m_size; }
+    int save_npc_2::get_size() { return m_size; }
+    int save_npc_3::get_size() { return m_size; }
 
     void save_npc_1::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
     void save_npc_2::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
@@ -48,7 +62,7 @@ namespace save_npc {
         memcpy(buffer + offset_res, m_buffer + offset_in, 4 * 36);
         offset_res +=   4 * 36;
         offset_in +=    4 * 36;
-        
+
         //MoveInAnimal & MoveOutAnimal
         for(int animal = 0; animal < 14; animal++) {
             //copy everything until LightMemory
@@ -80,7 +94,6 @@ namespace save_npc {
         //copy everything until NpcBirthdayHouse (after NpcArchive)
         memcpy(buffer, m_buffer, offset);
         //skip 20 archived Npcs
-        int save_npc_2_size = 0x1D6D48;
         memcpy(buffer + offset, m_buffer + offset + 20 * 232, res->get_size() - offset);
         res->from_data(buffer);
         delete buffer;
@@ -112,7 +125,7 @@ namespace save_npc {
         memcpy(buffer + offset_res, m_buffer + offset_in, 4 * 36);
         offset_res +=   4 * 36;
         offset_in +=    4 * 36;
-        
+
         //MoveInAnimal & MoveOutAnimal
         for(int animal = 0; animal < 14; animal++) {
             //copy everything until LightMemory
@@ -155,59 +168,12 @@ namespace save_npc {
         return std::make_unique<save_npc_3>(*(this));
     }
 
-
-    std::unique_ptr<save_npc> get_save_npc(u8 *data, u16 revision_in, u16 revision_out, save_npc_type &type) {    
-        switch(revision_out) {
-            case 0 ... 12:
-            {
-                type = save_npc_type::type_1;
-                switch(revision_in) {
-                    case 0 ... 12:
-                        return std::make_unique<save_npc_1>(data);
-                    case 13 ... 21:
-                        return save_npc_2(data).downgrade();
-                    case 22 ... 28:
-                        // this is likely going to break as the second downgrade is being called from the save_npc function and not the save_npc_2 function. i dont know how to properly cast it to do that.
-                        return save_npc_3(data).downgrade()->downgrade();
-                    default: 
-                        break;
-                }
-            }
-                break;
-            case 13 ... 21:
-            {
-                type = save_npc_type::type_2;
-                switch(revision_in) {
-                    case 0 ... 12:
-                        return save_npc_1(data).upgrade();
-                    case 13 ... 21:
-                        return std::make_unique<save_npc_2>(data);
-                    case 22 ... 28:
-                        return save_npc_3(data).downgrade();
-                    default: 
-                        break;
-                }
-            }
-                break;
-            case 22 ... 28:
-            {
-                type = save_npc_type::type_3;
-                switch(revision_in) {
-                    case 0 ... 12:
-                        return save_npc_1(data).upgrade()->upgrade();
-                    case 13 ... 21:
-                        return save_npc_2(data).upgrade();
-                    case 22 ... 28:
-                        return std::make_unique<save_npc_3>(data);
-                    default: 
-                        break;
-                }
-            }
-                break;
-            default:
-                type = save_npc_type::none;
-                return std::make_unique<save_npc_1>(nullptr);
-                break;
-        }
+    std::unique_ptr<save_npc> get_save_npc(u8 *data, u16 revision_in, u16 revision_out)
+    {
+        return save_struct::get_save_struct<save_npc>(constructors,
+                                                      revisions,
+                                                      data,
+                                                      revision_in,
+                                                      revision_out);
     }
 }

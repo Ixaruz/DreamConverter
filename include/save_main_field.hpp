@@ -1,45 +1,64 @@
 #pragma once
-#include <types.hpp>
+#include <save_struct.hpp>
 #include <cstring>
-#include <memory>
 
 namespace save_main_field {
 
-    enum class save_main_field_type{
-        none = 0,
-        type_1,
-        type_2
+    // enum class save_main_field_type{
+    //     none = 0,
+    //     type_1,
+    //     type_2
+    // };
+
+    // Interface class
+    class save_main_field {
+    public:
+        virtual u8 const *to_bin() = 0;
+        virtual int get_size() = 0;
+
+        virtual void from_data(u8 *data) = 0;
+
+        virtual std::unique_ptr<save_main_field> upgrade() = 0;
+        virtual std::unique_ptr<save_main_field> downgrade() = 0;
     };
 
-    class save_main_field_1 {
+    class save_main_field_1 : public save_main_field {
     protected:
-        static const int size = 0xDAA2C;
-        u8 everything[size];
-        save_main_field_1() {}
     public:
-        static int get_size() {return size;}
+        u8 const *to_bin() override;
+        int get_size() override;
 
-        virtual u8 *get_everything();
+        save_main_field_1() = default;
+        save_main_field_1(const save_main_field_1&) = default;
+        save_main_field_1(save_main_field_1&&) = default;
+        save_main_field_1(u8 *data);
+        void from_data(u8 *data) override;
 
-        save_main_field_1(void *data);
-    }; 
-
-    class save_main_field_2 : public save_main_field_1 {
-    protected:
-        static const int size = 0xDB2CC;
-        u8 everything[size];
-        u8 AdditionalAudioInfoV[0x20 * 69]; //indeed, 69
-    public:
-        static int get_size() {return size;}
-
-        u8 *get_everything() override;
-
-        save_main_field_2(void *data);
-
-        save_main_field_1 *downgrade();
+        std::unique_ptr<save_main_field> upgrade() override;
+        std::unique_ptr<save_main_field> downgrade() override;
+    private:
+        static const int m_size = 0xDAA2C;
+        u8 m_buffer[m_size];
     };
 
-    save_main_field_2 *upgrade(save_main_field_1 save_main_field);
+    class save_main_field_2 : public save_main_field {
+    protected:
+    public:
+        u8 const *to_bin() override;
+        int get_size() override;
 
-    std::unique_ptr<save_main_field_1 *> get_save_main_field(void *data, u16 revision_in, u16 revision_out, save_main_field_type &type);
+        save_main_field_2() = default;
+        save_main_field_2(const save_main_field_2&) = default;
+        save_main_field_2(save_main_field_2&&) = default;
+        save_main_field_2(u8 *data);
+        void from_data(u8 *data) override;
+
+        std::unique_ptr<save_main_field> upgrade() override;
+        std::unique_ptr<save_main_field> downgrade() override;
+    private:
+        static const int m_size = 0xDB2CC; // AdditionalAudioInfoV = 0x20 * 69, indeed, 69
+        u8 m_buffer[m_size];
+    };
+
+    std::unique_ptr<save_main_field> get_save_main_field(u8 *data, u16 revision_in, u16 revision_out);
 };

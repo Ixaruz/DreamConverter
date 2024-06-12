@@ -1,156 +1,130 @@
 #include <save_player_house_list.hpp>
 
-namespace save_player_house {
-
-    u8 *player_room_1::get_everything() {return everything;}
-
-    player_room_1::player_room_1(void *data) {
-        memcpy(everything, data, size);
-    }
-
-    u8 *player_room_2::get_everything() {return everything;}
-
-    player_room_2::player_room_2(void *data) {
-        memcpy(everything, data, size);
-    }
-
-    player_room_1 player_room_2::downgrade()
+namespace save_player_house
+{
+    std::vector<u16> revisions =
     {
-        u8 *buffer = new u8[player_room_1::get_size()]{0};
-        memcpy(buffer, everything, player_room_1::get_size());
-        player_room_1 res = player_room_1(buffer);
+        21, //1.11.0 (revision before upgrade)
+        22 //2.0.0
+    };
+
+    static std::map<u16, std::function<std::unique_ptr<save_player_house>(u8*)>> constructors =
+    {
+        {21, [](u8* data){ return std::make_unique<save_player_house_1>(data); }},
+        {22, [](u8* data){ return std::make_unique<save_player_house_2>(data); }}
+    };
+
+    u8 const *save_player_room_1::to_bin() { return m_buffer; }
+    u8 const *save_player_room_2::to_bin() { return m_buffer; }
+    u8 const *save_player_house_1::to_bin() { return m_buffer; }
+    u8 const *save_player_house_2::to_bin() { return m_buffer; }
+
+    int save_player_room_1::get_size() { return m_size; }
+    int save_player_room_2::get_size() { return m_size; }
+    int save_player_house_1::get_size() { return m_size; }
+    int save_player_house_2::get_size() { return m_size; }
+
+    void save_player_room_1::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
+    void save_player_room_2::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
+    void save_player_house_1::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
+    void save_player_house_2::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
+
+    save_player_room_1::save_player_room_1 (u8 *data) { this->from_data(data); }
+    save_player_room_2::save_player_room_2 (u8 *data) { this->from_data(data); }
+    save_player_house_1::save_player_house_1 (u8 *data) { this->from_data(data); }
+    save_player_house_2::save_player_house_2 (u8 *data) { this->from_data(data); }
+
+    std::unique_ptr<save_player_room> save_player_room_1::downgrade()
+    {
+        return std::make_unique<save_player_room_1>(*(this));
+    }
+
+    std::unique_ptr<save_player_room> save_player_room_2::downgrade()
+    {
+        save_player_room_1 *res = new save_player_room_1();
+        u8 *buffer = new u8[res->get_size()]{0};
+        memcpy(buffer, m_buffer, res->get_size());
+        res->from_data(buffer);
         delete buffer;
-        return res;
+        return std::make_unique<save_player_room_1>(*(res));
     }
 
-    player_room_2 upgrade(player_room_1 player_room) {
-        u8 *buffer = new u8[0x6C24]{0};
-        memcpy(buffer, player_room.get_everything(), player_room_1::get_size());
-        player_room_2 res = player_room_2(buffer);
+    std::unique_ptr<save_player_room> save_player_room_1::upgrade() {
+        save_player_room_2 *res = new save_player_room_2();
+        u8 *buffer = new u8[res->get_size()]{0};
+        memcpy(buffer, m_buffer, res->get_size());
+        res->from_data(buffer);
         delete buffer;
-        return res;
+        return std::make_unique<save_player_room_2>(*(res));
     }
 
-    u8 *save_player_house_1::get_everything() {
-        u8 *buffer = new u8[size];
-        memcpy(buffer, everything, size);
-        return buffer;
+    std::unique_ptr<save_player_room> save_player_room_2::upgrade()
+    {
+        return std::make_unique<save_player_room_2>(*(this));
     }
 
-    save_player_house_1::save_player_house_1(void *data) {
-        memcpy(everything, data, size);
+    std::unique_ptr<save_player_house> save_player_house_1::downgrade()
+    {
+        return std::make_unique<save_player_house_1>(*(this));
     }
 
-    u8 *save_player_house_2::get_everything() {
-        u8 *buffer = new u8[size];
-        memcpy(buffer, everything, size);
-        return buffer;
-    }
-
-    save_player_house_2::save_player_house_2(void *data) {
-        memcpy(everything, data, size);
-    }
-
-    save_player_house_1 *save_player_house_2::downgrade() {
-        u8 *buffer = new u8[save_player_house_1::get_size()]{0};
-        memcpy(buffer, everything, 0x120);
+    std::unique_ptr<save_player_house> save_player_house_2::downgrade() {
+        save_player_house_1 *res = new save_player_house_1();
+        save_player_room_1 *room1 = new save_player_room_1();
+        save_player_room_2 *room2 = new save_player_room_2();
+        u8 *buffer = new u8[res->get_size()]{0};
+        memcpy(buffer, m_buffer, 0x120); // HouseLevel -> EventFlag
         for(int i = 0; i < 6; i++){
-            memcpy(buffer + 0x120 + i * player_room_1::get_size(),
-            player_room_2(everything + 0x120 + i * player_room_2::get_size()).downgrade().get_everything(),
-            player_room_1::get_size());
+            memcpy(buffer + 0x120 + i * room1->get_size(),
+                   save_player_room_2(m_buffer + 0x120 + i * room2->get_size()).downgrade()->to_bin(),
+                   room1->get_size()); //RoomList
         }
-        memcpy(buffer + 0x263D0, everything + 0x289F8, 0x30);
-        return new save_player_house_1(buffer);
+        memcpy(buffer + 0x120 + (6 * room1->get_size()),
+               m_buffer + 0x120 + (6 * room2->get_size()),
+               0x30); // PlayerList -> Cockroach
+        res->from_data(buffer);
+        delete buffer;
+        return std::make_unique<save_player_house_1>(*(res));
     }
 
-    save_player_house_2 *upgrade(save_player_house_1 save_player_house) {
-        u8 *buffer = new u8[save_player_house_2::get_size()]{0};
-        u8 *everything = save_player_house.get_everything();
-        memcpy(buffer, everything, 0x120);
+    std::unique_ptr<save_player_house> save_player_house_1::upgrade() {
+        save_player_house_2 *res = new save_player_house_2();
+        save_player_room_1 *room1 = new save_player_room_1();
+        save_player_room_2 *room2 = new save_player_room_2();
+        u8 *buffer = new u8[res->get_size()]{0};
+        memcpy(buffer, m_buffer, 0x120);
         for(int i = 0; i < 6; i++){
-            memcpy(buffer + 0x120 + i * player_room_2::get_size(),
-            upgrade(player_room_1(everything + 0x120 + i * player_room_1::get_size())).get_everything(),
-            player_room_1::get_size());
+            memcpy(buffer + 0x120 + i * room2->get_size(),
+                   save_player_room_1(m_buffer + 0x120 + i * room1->get_size()).upgrade()->to_bin(),
+                   room1->get_size());
         }
-        memcpy(buffer + 0x289F8, everything + 0x263D0, 0x30);
-        return new save_player_house_2(buffer);
+        memcpy(buffer + 0x120 + (6 * room2->get_size()),
+               m_buffer + 0x120 + (6 * room1->get_size()),
+               0x30); // PlayerList -> Cockroach
+        res->from_data(buffer);
+        delete buffer;
+        return std::make_unique<save_player_house_2>(*(res));
     }
 
-    std::unique_ptr<save_player_house_1 *> get_save_player_house(void *data, u16 revision_in, u16 revision_out, save_player_house_type &type) {    
-        switch(revision_out) {
-            case 0 ... 21:
-            {
-                type = save_player_house_type::type_1;
-                switch(revision_in) {
-                    case 0 ... 21:
-                        return std::make_unique<save_player_house_1 *>(new save_player_house_1(data));
-                    case 22 ... 28:
-                        return std::make_unique<save_player_house_1 *>(save_player_house_2(data).downgrade());
-                    default: 
-                        break;
-                }
-            }
-                break;
-            case 22 ... 28:
-            {
-                type = save_player_house_type::type_2;
-                switch(revision_in) {
-                    case 0 ... 21:
-                        return std::make_unique<save_player_house_1 *>(upgrade(save_player_house_1(data)));
-                    case 22 ... 28:
-                        return std::make_unique<save_player_house_1 *>(new save_player_house_2(data));
-                    default: 
-                        break;
-                }
-            }
-                break;
-            default:
-                type = save_player_house_type::none;
-                return std::make_unique<save_player_house_1 *>(nullptr);
-                break;
-        }
+    std::unique_ptr<save_player_house> save_player_house_2::upgrade()
+    {
+        return std::make_unique<save_player_house_2>(*(this));
     }
 
-    std::vector<std::unique_ptr<save_player_house_1 *>> get_save_player_house_list(void *data, u16 revision_in, u16 revision_out, save_player_house_type &type) {    
-        std::vector<std::unique_ptr<save_player_house_1 *>> res;
-        type = save_player_house_type::none;
+    std::unique_ptr<save_player_house> get_save_player_house(u8 *data, u16 revision_in, u16 revision_out)
+    {
+        return save_struct::get_save_struct<save_player_house>(constructors,
+                                                            revisions,
+                                                            data,
+                                                            revision_in,
+                                                            revision_out);
+    }
+
+    std::vector<std::unique_ptr<save_player_house>> get_save_player_house_list(u8 *data, u16 revision_in, u16 revision_out) {
+        std::vector<std::unique_ptr<save_player_house>> res;
+        int house_size = save_struct::create_save_struct(constructors, save_struct::get_clamped_revision(revisions, revision_in), data)->get_size();
         for(int house_index = 0; house_index < 8; house_index++){
-            switch(revision_out) {
-            case 0 ... 21:
-            {
-                type = save_player_house_type::type_1;
-                switch(revision_in) {
-                    case 0 ... 21: {
-                        res.push_back(std::move(std::make_unique<save_player_house_1 *>(new save_player_house_1((u8 *)data + (house_index * save_player_house_1::get_size())))));
-                    }
-                    case 22 ... 28: {
-                        res.push_back(std::move(std::make_unique<save_player_house_1 *>(save_player_house_2((u8 *)data + (house_index * save_player_house_2::get_size())).downgrade())));
-                    }
-                    default: 
-                        break;
-                }
-            }
-                break;
-            case 22 ... 28:
-            {
-                type = save_player_house_type::type_2;
-                switch(revision_in) {
-                    case 0 ... 21: {
-                        res.push_back(std::move(std::make_unique<save_player_house_1 *>(upgrade(save_player_house_1((u8 *)data + (house_index * save_player_house_1::get_size()))))));
-                    }
-                    case 22 ... 28: {
-                        res.push_back(std::move(std::make_unique<save_player_house_1 *>(new save_player_house_2((u8 *)data + (house_index * save_player_house_2::get_size())))));
-                    }
-                    default: 
-                        break;
-                }
-            }
-                break;
-            default:
-                type = save_player_house_type::none;
-                res.push_back(std::move(std::make_unique<save_player_house_1 *>(nullptr)));
-                break;
-            }
+            res.push_back(std::move(get_save_player_house(data + (house_index * house_size), revision_in, revision_out)));
         }
         return res;
     }

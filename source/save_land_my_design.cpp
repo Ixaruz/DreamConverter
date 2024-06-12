@@ -3,6 +3,18 @@
 namespace save_land_my_design
 {
 
+    std::vector<u16> revisions =
+    {
+        17, //1.8.0 (revision before upgrade)
+        18 //1.9.0
+    };
+
+    static std::map<u16, std::function<std::unique_ptr<save_land_my_design>(u8*)>> constructors =
+    {
+        {17, [](u8* data){ return std::make_unique<save_land_my_design_1>(data); }},
+        {18, [](u8* data){ return std::make_unique<save_land_my_design_2>(data); }}
+    };
+
     u8 const *save_land_my_design_1::to_bin()
     {
         u8 *buffer = new u8[m_size]{0};
@@ -32,6 +44,21 @@ namespace save_land_my_design
         memcpy(buffer + offset, m_ExhibitAccounts, 0x10 * 8);
         return buffer;
     }
+
+    int save_land_my_design_1::get_size() { return m_size; }
+    int save_land_my_design_2::get_size() { return m_size; }
+
+    u8 const *save_land_my_design_1::get_MyDesignNormals() { return m_MyDesignNormals; }
+    u8 const *save_land_my_design_1::get_MyDesignPros() { return m_MyDesignPros; }
+    u8 const *save_land_my_design_1::get_FlagMyDesign() { return m_FlagMyDesign; }
+    u8 const *save_land_my_design_1::get_TailorMyDesigns() { return m_TailorMyDesigns; }
+    u8 const *save_land_my_design_1::get_ExhibitAccounts() { return m_ExhibitAccounts; }
+
+    u8 const *save_land_my_design_2::get_MyDesignNormals() { return m_MyDesignNormals; }
+    u8 const *save_land_my_design_2::get_MyDesignPros() { return m_MyDesignPros; }
+    u8 const *save_land_my_design_2::get_FlagMyDesign() { return m_FlagMyDesign; }
+    u8 const *save_land_my_design_2::get_TailorMyDesigns() { return m_TailorMyDesigns; }
+    u8 const *save_land_my_design_2::get_ExhibitAccounts() { return m_ExhibitAccounts; }
 
     void save_land_my_design_1::from_data(u8 *data)
     {
@@ -125,41 +152,12 @@ namespace save_land_my_design
     }
 
 
-    std::unique_ptr<save_land_my_design> get_save_land_my_design(u8 *data, u16 revision_in, u16 revision_out, save_land_my_design_type &type)
+    std::unique_ptr<save_land_my_design> get_save_land_my_design(u8 *data, u16 revision_in, u16 revision_out)
     {
-        switch (revision_out)
-        {
-        case 0 ... 17:
-
-        {
-            type = save_land_my_design_type::type_1;
-            switch (revision_in)
-            {
-            case 0 ... 17:
-                return std::make_unique<save_land_my_design_1>(new save_land_my_design_1(data));
-            case 18 ... 28:
-                return save_land_my_design_2(data).downgrade();
-            default:
-                break;
-            }
-        }
-        case 18 ... 28:
-
-        {
-            type = save_land_my_design_type::type_2;
-            switch (revision_in)
-            {
-            case 0 ... 17:
-                return save_land_my_design_1(data).upgrade();
-            case 18 ... 28:
-                return std::make_unique<save_land_my_design_2>(new save_land_my_design_2(data));
-            default:
-                break;
-            }
-        }
-        default:
-            type = save_land_my_design_type::none;
-            return std::make_unique<save_land_my_design_1>(nullptr);
-        }
+        return save_struct::get_save_struct<save_land_my_design>(constructors,
+                                                                 revisions,
+                                                                 data,
+                                                                 revision_in,
+                                                                 revision_out);
     }
-};
+}

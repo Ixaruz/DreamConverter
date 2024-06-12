@@ -11,5 +11,5 @@ namespace smmh_paths_by_revision{
     
     string game(revision_checker::file_header_info fhi);
     
-    //string personal(revision_checker::file_header_info fhi);
+    string personal(revision_checker::file_header_info fhi);
 }

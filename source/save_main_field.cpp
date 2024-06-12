@@ -1,64 +1,64 @@
 #include <save_main_field.hpp>
-namespace save_main_field {
-    u8 *save_main_field_1::get_everything() {return everything;}
+namespace save_main_field
+{
+    std::vector<u16> revisions =
+    {
+        21, //1.11.0 (revision before upgrade)
+        22 //2.0.0
+    };
 
-    save_main_field_1::save_main_field_1(void *data){
-        memcpy(everything, data, size);
+    static std::map<u16, std::function<std::unique_ptr<save_main_field>(u8*)>> constructors =
+    {
+        {21, [](u8* data){ return std::make_unique<save_main_field_1>(data); }},
+        {22, [](u8* data){ return std::make_unique<save_main_field_2>(data); }}
+    };
+
+    u8 const *save_main_field_1::to_bin() { return m_buffer; }
+    u8 const *save_main_field_2::to_bin() { return m_buffer; }
+
+    int save_main_field_1::get_size() { return m_size; }
+    int save_main_field_2::get_size() { return m_size; }
+
+    void save_main_field_1::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
+    void save_main_field_2::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
+
+    save_main_field_1::save_main_field_1 (u8 *data) { this->from_data(data); }
+    save_main_field_2::save_main_field_2 (u8 *data) { this->from_data(data); }
+
+    std::unique_ptr<save_main_field> save_main_field_1::downgrade()
+    {
+        return std::make_unique<save_main_field_1>(*(this));
     }
 
-    u8 * save_main_field_2::get_everything() {
-        u8 *buffer = new u8[size]{0};
-        memcpy(buffer, everything, 0xDAA2C);
-        memcpy(buffer + 0xDAA2C, AdditionalAudioInfoV, 0x20 * 69);
-        return buffer;
-    }
-
-    save_main_field_2::save_main_field_2(void *data){
-        memcpy(everything, data, save_main_field_1::get_size());
-        memcpy(AdditionalAudioInfoV, (u8 *)data + save_main_field_1::get_size(), 0x20 * 69);
-    }
-
-    save_main_field_1 *save_main_field_2::downgrade(){
-        return new save_main_field_1(everything);
-    }
-
-    save_main_field_2 *upgrade(save_main_field_1 save_main_field){
-        u8 *buffer = new u8[save_main_field_2::get_size()]{0};
-        memcpy(buffer, save_main_field.get_everything(), save_main_field_2::get_size());
-        save_main_field_2 *res = new save_main_field_2(buffer);
+    std::unique_ptr<save_main_field> save_main_field_2::downgrade()
+    {
+        save_main_field_1 *res = new save_main_field_1();
+        u8 *buffer = new u8[res->get_size()]{0};
+        memcpy(buffer, m_buffer, res->get_size());
+        res->from_data(buffer);
         delete buffer;
-        return res;
+        return std::make_unique<save_main_field_1>(*(res));
+    }
+    std::unique_ptr<save_main_field> save_main_field_1::upgrade(){
+        save_main_field_2 *res = new save_main_field_2();
+        u8 *buffer = new u8[res->get_size()]{0};
+        memcpy(buffer, m_buffer, m_size);
+        res->from_data(buffer);
+        delete buffer;
+        return std::make_unique<save_main_field_2>(*(res));
     }
 
-    std::unique_ptr<save_main_field_1 *> get_save_main_field(void *data, u16 revision_in, u16 revision_out, save_main_field_type &type) {
-        switch(revision_out) {
-            case 0 ... 21:
-            {
-                type = save_main_field_type::type_1;
-                switch(revision_in) {
-                    case 0 ... 21:
-                        return std::make_unique<save_main_field_1 *>(new save_main_field_1(data));
-                    case 22 ... 28:
-                        return std::make_unique<save_main_field_1 *>(save_main_field_2(data).downgrade());
-                    default: 
-                        break;
-                }
-            }
-            case 22 ... 28:
-            {
-                type = save_main_field_type::type_2;
-                switch(revision_in) {
-                    case 0 ... 21:
-                        return std::make_unique<save_main_field_1 *>(upgrade(save_main_field_1(data)));
-                    case 22 ... 28:
-                        return std::make_unique<save_main_field_1 *>(new save_main_field_2(data));
-                    default: 
-                        break;
-                }
-            }
-            default:
-                type = save_main_field_type::none;
-                return std::make_unique<save_main_field_1 *>(nullptr);
-        }
+    std::unique_ptr<save_main_field> save_main_field_2::upgrade()
+    {
+        return std::make_unique<save_main_field_2>(*(this));
+    }
+
+    std::unique_ptr<save_main_field> get_save_main_field(u8 *data, u16 revision_in, u16 revision_out)
+    {
+        return save_struct::get_save_struct<save_main_field>(constructors,
+                                                             revisions,
+                                                             data,
+                                                             revision_in,
+                                                             revision_out);
     }
 }

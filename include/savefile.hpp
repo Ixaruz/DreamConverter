@@ -13,7 +13,7 @@ namespace savefile {
     u32 read_32_from_metadata(fs::path dream_path, string name);
 
     string read_string_from_metadata(fs::path dream_path, string name);
-    
+
     size_t read_player_count(fs::path dream_path);
 
     string read_island_name(fs::path dream_path);
