@@ -61,7 +61,7 @@ const vector<vector<u32>> main_fields_to_copy {
 
 const vector<vector<u32>> personal_fields_to_copy {
     {MurmurHash3::Calc_CEval("Player"), 3545928273 /*_d35a9251*/ /*Code : u32*/},
-    {MurmurHash3::Calc_CEval("Player"), 419281215 /*_d35a9251*/ /*s8*/},
+    {MurmurHash3::Calc_CEval("Player"), 419281215 /*_18fdb93f*/ /*s8*/},
     {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("LookPack")},
     {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("PlayerId")},
     {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("EventFlag")},
@@ -69,7 +69,7 @@ const vector<vector<u32>> personal_fields_to_copy {
     {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("LifeSupport")}, //don't fit //changed in 1.5.0; size += 0xC00 ("OpenProfile"; 2d array of bools for *squints* something?)
     {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("BirthDay")},
     {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("PastDaysFromMade")},
-    /*{MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("NetProfile")},*/ //don't fit //changed in 2.0.0; size += 0x2
+    {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("NetProfile")}, //don't fit //changed in 2.0.0; size += 0x2 (+"PlannerID"), can be zero'd
     {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("ProfileMain")},
     {MurmurHash3::Calc_CEval("Player"), 1562364676 /*_5d1fcb04*/ /*u8*/},
     {MurmurHash3::Calc_CEval("Player"), MurmurHash3::Calc_CEval("LastPlayDate")},

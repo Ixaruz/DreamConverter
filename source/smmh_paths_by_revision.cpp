@@ -6,12 +6,8 @@ namespace smmh_paths_by_revision{
         sprintf(revision_string, "%d_%d.byml", fhi.minor, fhi.major);
         return string(revision_string);
     }
-    
+
     string game(revision_checker::file_header_info fhi) {
         return relative_path + "/S00_" + revision_string(fhi);
-    }
-    
-    string personal(revision_checker::file_header_info fhi) {
-        return relative_path + "/P00_" + revision_string(fhi);
     }
 }

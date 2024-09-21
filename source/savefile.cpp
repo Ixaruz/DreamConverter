@@ -132,7 +132,7 @@ namespace savefile {
         delete data;
     }
 
-    void calc_file_hash(fs::path data_path)
+    void calc_file_hash(fs::path data_path, u16 revision)
     {
         std::string filename = data_path.filename().generic_string();
 
@@ -146,11 +146,14 @@ namespace savefile {
         data_file.close();
 
 
-        file_hash_details *fhd = REV_200.find_file_hash_details(filename);
+        file_hash_details *fhd = revision_checker::hash_info[revision].find_file_hash_details(filename);
         if (fhd != nullptr) {
             for(auto &hashregion : fhd->hash_regions) {
                 MurmurHash3::Update(data, hashregion->hash_offset, hashregion->get_begin_offset(), hashregion->size);
             }
+        }
+        else {
+            std::cout << "WARNING: Couldn't find hash details for file \"" << filename << "\"" << std::endl;
         }
 
         data_file.open(data_path, ios::out | ios::binary | ios::trunc);
@@ -200,14 +203,14 @@ namespace savefile {
         }
     }
 
-    void encrypt_batch(fs::path in_path, fs::path out_path, u32 tick)
+    void encrypt_batch(fs::path in_path, fs::path out_path, u32 tick, u16 revision)
     {
         for (auto const& dir_entry : fs::directory_iterator(in_path))
         {
             if(fs::is_directory(dir_entry)){
                 fs::path new_out_path = out_path / util::get_folder_name(dir_entry.path());
                 fs::create_directories(new_out_path);
-                encrypt_batch(dir_entry.path(), new_out_path, tick);
+                encrypt_batch(dir_entry.path(), new_out_path, tick, revision);
             }
 
             else if(dir_entry.path().extension() == ".dat" && dir_entry.path().filename().generic_string().find("Header") == string::npos) {
@@ -222,7 +225,7 @@ namespace savefile {
                     fs::path header_path(out_path / (dir_entry.path().stem().generic_string() + "Header.dat"));
                     //cout << dir_entry.path().generic_string() << endl;
                     //cout << data_path.generic_string() << endl;
-                    calc_file_hash(data_path);
+                    calc_file_hash(data_path, revision);
                     encrypt_pair(dir_entry.path(), header_path, data_path, tick);
                 }
             }
