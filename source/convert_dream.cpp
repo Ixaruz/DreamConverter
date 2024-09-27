@@ -146,13 +146,9 @@ convert_dream::convert_dream(fs::path &executable_path, fs::path &template_path,
 
         copy_data_(out_path, dream_file_path);
 
-        fs::path enc_out_path = dream_path / "enc";
-        fs::remove_all(enc_out_path);
-        fs::create_directory(enc_out_path);
-
         u32 tick = static_cast<u32>(time(NULL));
 
-        savefile::encrypt_batch(out_path, enc_out_path, tick, main_fhi.save_revision);
+        savefile::encrypt_batch(out_path, out_path, tick, main_fhi.save_revision);
 
         cout << "encrypted! (done)" << endl;
     }

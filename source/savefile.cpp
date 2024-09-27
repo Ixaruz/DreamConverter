@@ -163,38 +163,43 @@ namespace savefile {
 
     void decrypt_batch(fs::path in_path, fs::path out_path, bool *g_players)
     {
+        // snapshot dir_entries in case in_path and out_path are the same
+        std::vector<std::filesystem::path> dir_entries{};
         for (auto const& dir_entry : fs::directory_iterator(in_path))
         {
+            dir_entries.push_back(dir_entry.path());
+        }
+        for (auto const& dir_entry : dir_entries)
+        {
             if(fs::is_directory(dir_entry)){
-                string folder_name = util::get_folder_name(dir_entry.path());
-                //matches the digits in Villager0 to Villager7
-                regex rgx("[a-zA-Z]+(\\d)");
+                string folder_name = util::get_folder_name(dir_entry);
+                //match the digits in Villager0 to Villager7
+                regex rgx("Villager(\\d)");
                 smatch matches;
                 //if its a player that needs to be dumped
                 if(regex_search(folder_name, matches, rgx) && g_players[stoi(matches[1].str())]) {
                     fs::path new_out_path = out_path / folder_name;
                     fs::create_directories(new_out_path);
-                    decrypt_batch(dir_entry.path(), new_out_path, g_players);
+                    decrypt_batch(dir_entry, new_out_path, g_players);
                 }
-
             }
 
-            else if(dir_entry.path().extension() == ".dat" && dir_entry.path().filename().generic_string().find("Header") == string::npos) {
-                fs::path data_path(out_path / dir_entry.path().filename());
-                if(dir_entry.path() != data_path) {
+            else if(dir_entry.extension() == ".dat" && dir_entry.filename().generic_string().find("Header") == string::npos) {
+                fs::path data_path(out_path / dir_entry.filename());
+                if(dir_entry != data_path) {
                     if (fs::exists(data_path)) {
                         fs::remove(data_path);
                     }
-                    fs::copy_file(dir_entry.path(), data_path);
+                    fs::copy_file(dir_entry, data_path);
                 }
-                if(dir_entry.path().filename() != "landname.dat") {
-                    fs::path header_path(in_path / (dir_entry.path().stem().generic_string() + "Header.dat"));
+                if(dir_entry.filename() != "landname.dat") {
+                    fs::path header_path(in_path / (dir_entry.stem().generic_string() + "Header.dat"));
                     //cout << dir_entry.path().generic_string() << endl;
                     //cout << data_path.generic_string() << endl;
                     if(fs::exists(header_path)){
-                        decrypt_pair(dir_entry.path(), header_path, data_path);
+                        decrypt_pair(dir_entry, header_path, data_path);
                         //if same directory, we need to delete the header file after decryption
-                        if(dir_entry.path() == data_path) {
+                        if(dir_entry == data_path) {
                             fs::remove(header_path);
                         }
                     }
@@ -205,28 +210,32 @@ namespace savefile {
 
     void encrypt_batch(fs::path in_path, fs::path out_path, u32 tick, u16 revision)
     {
+        // snapshot dir_entries in case in_path and out_path are the same
+        std::vector<std::filesystem::path> dir_entries{};
         for (auto const& dir_entry : fs::directory_iterator(in_path))
         {
+            dir_entries.push_back(dir_entry.path());
+        }
+        for (auto const& dir_entry : dir_entries)
+        {
             if(fs::is_directory(dir_entry)){
-                fs::path new_out_path = out_path / util::get_folder_name(dir_entry.path());
+                fs::path new_out_path = out_path / util::get_folder_name(dir_entry);
                 fs::create_directories(new_out_path);
-                encrypt_batch(dir_entry.path(), new_out_path, tick, revision);
+                encrypt_batch(dir_entry, new_out_path, tick, revision);
             }
 
-            else if(dir_entry.path().extension() == ".dat" && dir_entry.path().filename().generic_string().find("Header") == string::npos) {
-                fs::path data_path(out_path / dir_entry.path().filename());
-                if(dir_entry.path() != data_path) {
+            else if(dir_entry.extension() == ".dat" && dir_entry.filename().generic_string().find("Header") == string::npos) {
+                fs::path data_path(out_path / dir_entry.filename());
+                if(dir_entry != data_path) {
                     if (fs::exists(data_path)){
                         fs::remove(data_path);
                     }
-                    fs::copy_file(dir_entry.path(), data_path);
+                    fs::copy_file(dir_entry, data_path);
                 }
-                if(dir_entry.path().filename() != "landname.dat") {
-                    fs::path header_path(out_path / (dir_entry.path().stem().generic_string() + "Header.dat"));
-                    //cout << dir_entry.path().generic_string() << endl;
-                    //cout << data_path.generic_string() << endl;
+                if(dir_entry.filename() != "landname.dat") {
+                    fs::path header_path(out_path / (dir_entry.stem().generic_string() + "Header.dat"));
                     calc_file_hash(data_path, revision);
-                    encrypt_pair(dir_entry.path(), header_path, data_path, tick);
+                    encrypt_pair(data_path, header_path, data_path, tick);
                 }
             }
         }
