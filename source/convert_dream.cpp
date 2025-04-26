@@ -400,7 +400,7 @@ void convert_dream::fix_player_(void *player_buffer, void *dream_player_buffer, 
     //UpgradePocket30 and UpgradePocket40
     u32 pocket1_size = event_flags_map[669]? event_flags_map[670]? 0x14 : 0x0A : 0;
     u8 expand_baggage = event_flags_map[669]? event_flags_map[670]? 2 : 1 : 0;
-    bool sell_pocket40 = event_flags_map[669] ^ event_flags_map[670];
+    u16 sell_pocket40 = event_flags_map[669] ^ event_flags_map[670];
 
     util::write_32(player_buffer, storage_size_offset, storage_size);
     util::write_32(player_buffer, pocket_1_size_offset, pocket1_size);
