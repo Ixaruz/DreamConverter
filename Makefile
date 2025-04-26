@@ -21,7 +21,7 @@ CFLAGS = -flto -Wall -Wextra -I. $(INCLUDE)
 CXXFLAGS = $(CFLAGS) -std=gnu++20
 CC = gcc
 CXX = g++
-LIBS  = 
+LIBS  =
 
 	export LD	:=	$(CXX)
 
