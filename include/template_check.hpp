@@ -25,7 +25,7 @@ namespace template_check {
         fs::path templ_path;
         bool *g_players = nullptr;
         bool personalfound[8] = { false };
-        result res = { error::none, "" };
+        result res = { error::none, "(All good)" };
         bool revision_found = false;
         revision_checker::file_header_info _file_header_info;
 

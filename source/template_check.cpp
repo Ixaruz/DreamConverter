@@ -16,10 +16,12 @@ namespace template_check {
                 }
             }
         }
-        res.additional_info = playernumbers;
+        if (res.error_type != error::none) {
+            res.additional_info = playernumbers;
+        }
     }
 
-    result template_check::check_template_files(bool is_sub_dir) {return template_check::check_template_files(templ_path, is_sub_dir);}
+    result template_check::check_template_files(bool is_sub_dir) {return check_template_files(templ_path, is_sub_dir);}
 
     result template_check::check_template_files(fs::path file_path, bool is_sub_dir) {
 
@@ -29,9 +31,11 @@ namespace template_check {
         for (auto const& dir_entry : fs::directory_iterator(file_path))
         {
             if(fs::is_directory(dir_entry)){
+                // folder_name should be VillagerX where X is a number between 0 and 7
+                // .back() gives us X and minus '0' we should get the index of the villager (idk why I did this so complicated)
                 if(g_players[util::get_folder_name(dir_entry.path()).back() - '0']) {
-                    //cout << "need to check directory:" << endl << dir_entry.path().generic_string() << endl;
                     res = check_template_files(dir_entry.path(), true);
+                    // return early on error
                     if (res.error_type != error::none) {
                         return res;
                     }

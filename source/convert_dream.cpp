@@ -182,13 +182,10 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
     landname_file.close();
 
     for(vector<u32> field : main_fields_to_copy) {
-        printf("field: 0x%08X %u\n", field.back(), field.back());
         u64 field_offset = main_yaml->CalcOffsets(main_field_type, field);
         u64 field_size = main_yaml->GetSize(main_field_type, field);
-        printf("field offset: 0x%lX field size: 0x%lX\n", field_offset, field_size);
         u64 dream_field_offset = dream_yaml->CalcOffsets(main_field_type, field) + dream_header_difference;
         u64 dream_field_size = dream_yaml->GetSize(main_field_type, field);
-        printf("dream field offset: 0x%lX dream field size: 0x%lX\n------------------------\n", dream_field_offset, dream_field_size);
 
         switch (field.back())
         {
@@ -196,40 +193,24 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
         {
             auto npc = save_npc::get_save_npc(dream_buffer + dream_field_offset, dream_fhi.save_revision, main_fhi.save_revision);
             util::write_data(main_buffer + field_offset, 0, const_cast<u8 *>(npc.get()->to_bin()), field_size);
-
-            // fstream npc_file(fs::path(out_path / "npc.dat"), ios::out | ios::binary);
-            // util::write_data((ofstream &)npc_file, 0, const_cast<u8 *>(npc.get()->to_bin()), field_size);
-            // npc_file.close();
             break;
         }
         case MurmurHash3::Calc_CEval("LandTime"):
         {
             auto time = save_land_time::get_save_land_time(dream_buffer + dream_field_offset, dream_fhi.save_revision, main_fhi.save_revision);
             util::write_data(main_buffer + field_offset, 0, const_cast<u8 *>(time.get()->to_bin()), field_size);
-
-            // fstream time_file(fs::path(out_path / "time.dat"), ios::out | ios::binary);
-            // util::write_data((ofstream &)time_file, 0, const_cast<u8 *>(time.get()->to_bin()), field_size);
-            // time_file.close();
             break;
         }
         case MurmurHash3::Calc_CEval("LandMyDesign"):
         {
             auto my_design = save_land_my_design::get_save_land_my_design(dream_buffer + dream_field_offset, dream_fhi.save_revision, main_fhi.save_revision);
             util::write_data(main_buffer + field_offset, 0, const_cast<u8 *>(my_design.get()->to_bin()), field_size);
-
-            // fstream my_design_file(fs::path(out_path / "my_design.dat"), ios::out | ios::binary);
-            // util::write_data((ofstream &)my_design_file, 0, const_cast<u8 *>(my_design.get()->to_bin()), field_size);
-            // my_design_file.close();
             break;
         }
         case MurmurHash3::Calc_CEval("MainField"):
         {
             auto main_field = save_main_field::get_save_main_field(dream_buffer + dream_field_offset, dream_fhi.save_revision, main_fhi.save_revision);
             util::write_data(main_buffer + field_offset, 0, const_cast<u8 *>(main_field.get()->to_bin()), field_size);
-
-            // fstream main_field_file(fs::path(out_path / "main_field.dat"), ios::out | ios::binary);
-            // util::write_data((ofstream &)main_field_file, 0, const_cast<u8 *>(main_field.get()->to_bin()), field_size);
-            // main_field_file.close();
             break;
         }
         case MurmurHash3::Calc_CEval("PlayerHouseList"):
@@ -277,13 +258,10 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
         player_file.close();
 
         for(vector<u32> field : personal_fields_to_copy) {
-            printf("field: 0x%08X %u\n", field.back(), field.back());
             u64 field_offset = main_yaml->CalcOffsets(personal_field_type, field);
             u64 field_size = main_yaml->GetSize(personal_field_type, field);
-            printf("field offset: 0x%lX field size: 0x%lX\n", field_offset, field_size);
             u64 dream_field_offset = dream_yaml->CalcOffsets(personal_field_type, field) + dream_header_difference + dream_main_size + (i * dream_player_size);
             u64 dream_field_size = dream_yaml->GetSize(personal_field_type, field);
-            printf("dream field offset: 0x%lX dream field size: 0x%lX\n------------------------\n", dream_field_offset, dream_field_size);
 
             u8 *nullbuffer = new u8[field_size]{0};
             // override with zeros first (in case the field we are writing is smaller than the input field)
@@ -314,55 +292,6 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
     delete dream_buffer;
 }
 
-/*
-void convert_dream::copy_data(fs::path &out_path, fs::path &dream_file_path) {
-    fs::path out_main_path(out_path / "main.dat");
-    vector<fs::path> out_player_paths = savefile::get_player_folders(out_path, g_players);
-    fstream main_file, player_file, dream_file;
-    //cout << out_main_path.generic_string() << endl;
-
-    u8 *land_main_buffer = new u8[REV_200_MAIN];
-    u8 *player_buffer = new u8[REV_200_PERSONAL];
-    u32 dream_field_size = mainSize + (playerSize * player_count);
-    u8 *dream_buffer = new u8[dream_field_size];
-    main_file.open(out_main_path, ios::in | ios::binary);
-    dream_file.open(dream_file_path, ios::in | ios::binary);
-    util::read_data((ifstream &)main_file, 0, land_main_buffer, REV_200_MAIN);
-    util::read_data((ifstream &)dream_file, dream_header_size, dream_buffer, dream_field_size);
-    main_file.close();
-    dream_file.close();
-
-    get_account_table(land_main_buffer);
-    util::write_data(land_main_buffer, save_header_size, dream_buffer, mainSize);
-    //fix_main(land_main_buffer);
-
-    main_file.open(out_main_path, ios::out | ios::binary);
-    util::write_data((ofstream &)main_file, 0, land_main_buffer, REV_200_MAIN);
-    main_file.close();
-
-    u8 i = 0;
-    for(fs::path &out_player_path : out_player_paths) {
-        fs::path out_player_personal_path = out_player_path / "personal.dat";
-        //cout << out_player_personal_path.generic_string() << endl;
-        player_file.open(out_player_personal_path, ios::in | ios::binary);
-        util::read_data((ifstream &)player_file, 0, player_buffer, REV_200_PERSONAL);
-        player_file.close();
-
-        util::write_data(player_buffer, save_header_size, dream_buffer + mainSize + (playerSize * i), playerSize);
-        u8 house_level = 0;
-        util::read_data(land_main_buffer, save_header_size + houseLvlOffset +  (i * houseSize), &house_level, sizeof(u8));
-
-        //fix_player(player_buffer, dream_buffer + mainSize + (playerSize * i), house_level);
-
-        player_file.open(out_player_personal_path, ios::out | ios::binary);
-        util::write_data((ofstream &)player_file, 0, player_buffer, REV_200_PERSONAL);
-        player_file.close();
-
-        i++;
-    }
-}
-*/
-
 void convert_dream::write_landname_(void *dream_buffer, ofstream &landname_file) {
     // + IslandRubyType
     u64 town_name_size = dream_town_name_size + 2;
@@ -371,7 +300,6 @@ void convert_dream::write_landname_(void *dream_buffer, ofstream &landname_file)
     util::write_data(landname_file, 0, town_name_buffer, town_name_size);
     delete town_name_buffer;
 }
-
 
 void convert_dream::fix_main_(void *main_buffer) {
     for(auto &fix : dream_land_event_flags) {
