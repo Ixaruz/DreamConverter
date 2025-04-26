@@ -1,0 +1,27 @@
+# build.yml
+name: Build
+
+on:
+  push: # any branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+       image: danger89/cmake
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+        with:
+            submodules: recursive
+      - name: build application
+        run: |
+          cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          ninja -C build DreamConverter -j $(($(nproc) + 1))
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: DreamConverter
+          path: |
+            build/DreamConverter
+
