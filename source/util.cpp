@@ -9,43 +9,43 @@ namespace util {
             *((char *)buffer + bit_offset / 8) ^= 1 << (bit_offset % 8);
     }
 
-    void read_32(ifstream &file, u32 offset, u32 &value) {
+    void read_32(ifstream &file, u64 offset, u32 &value) {
         file.seekg(offset, ios::beg);
         file.readsome((char *)&value, sizeof(u32));
     }
 
-    void read_32(void *buffer, u32 offset, u32 &value){
+    void read_32(void *buffer, u64 offset, u32 &value){
         read_data(buffer, offset, &value, sizeof(u32));
     }
 
-    void write_32(ofstream &file, u32 offset, u32 value) {
+    void write_32(ofstream &file, u64 offset, u32 value) {
         file.seekp(offset, ios::beg);
         file.write((char *)&value, sizeof(u32));
     }
 
-    void write_32(void *buffer, u32 offset, u32 value){
+    void write_32(void *buffer, u64 offset, u32 value){
         write_data(buffer, offset, &value, sizeof(u32));
     }
 
-    void read_data(ifstream &file, u32 offset, void *value, u32 size) {
+    void read_data(ifstream &file, u64 offset, void *value, u64 size) {
         if(value != nullptr) {
             file.seekg(offset, ios::beg);
             file.readsome((char *)value, size);
         }
     }
 
-    void read_data(void *buffer, u32 offset, void *value, u32 size) {
+    void read_data(void *buffer, u64 offset, void *value, u64 size) {
         memcpy(value, (char *)buffer + offset, size);
     }
 
-    void write_data(ofstream &file, u32 offset, void *value, u32 size) {
+    void write_data(ofstream &file, u64 offset, void const *value, u64 size) {
         if(value != nullptr) {
             file.seekp(offset, ios::beg);
             file.write((char *)value, size);
         }
     }
 
-    void write_data(void *buffer, u32 offset, void *value, u32 size) {
+    void write_data(void *buffer, u64 offset, void const *value, u64 size) {
         memcpy((char *)buffer + offset, value, size);
     }
 

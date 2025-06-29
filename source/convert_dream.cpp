@@ -56,16 +56,60 @@ void convert_dream::setup_(fs::path &executable_path) {
                                                                     MurmurHash3::Calc_CEval("Player"),
                                                                     MurmurHash3::Calc_CEval("EventFlag")}));
     dream_event_flag_player_offset =    dream_yaml->CalcOffsets(personal_field_type,
-                                                               vector<u32>({
+                                                                vector<u32>({
                                                                     MurmurHash3::Calc_CEval("Player"),
                                                                     MurmurHash3::Calc_CEval("EventFlag")}));
+
+    net_player_profile_offset =         main_yaml->CalcOffsets(personal_field_type,
+                                                               vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("NetProfile")}));
+    net_player_profile_size =           main_yaml->GetSize(personal_field_type,
+                                                           vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("NetProfile")}));
+    dream_net_player_profile_offset =   dream_yaml->CalcOffsets(personal_field_type,
+                                                                vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("NetProfile")}));
+    dream_net_player_profile_size =     dream_yaml->GetSize(personal_field_type,
+                                                            vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("NetProfile")}));
+    player_profile_offset =             main_yaml->CalcOffsets(personal_field_type,
+                                                               vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("ProfileMain")}));
+    player_profile_size =               main_yaml->GetSize(personal_field_type,
+                                                           vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("ProfileMain")}));
+    dream_player_profile_offset =       dream_yaml->CalcOffsets(personal_field_type,
+                                                                vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("ProfileMain")}));
+    dream_player_profile_size =         dream_yaml->GetSize(personal_field_type,
+                                                            vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("ProfileMain")}));
+    player_profile_report_info_offset = main_yaml->CalcOffsets(personal_field_type,
+                                                               vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("ProfileMain"),
+                                                                    MurmurHash3::Calc_CEval("PlayerProfileReportInfo")}));
+    dream_player_profile_report_info_offset =
+                                        dream_yaml->CalcOffsets(personal_field_type,
+                                                                vector<u32>({
+                                                                    MurmurHash3::Calc_CEval("Player"),
+                                                                    MurmurHash3::Calc_CEval("ProfileMain"),
+                                                                    MurmurHash3::Calc_CEval("PlayerProfileReportInfo")}));
     speciality_fruit_offset =           main_yaml->CalcOffsets(personal_field_type,
                                                                vector<u32>({
                                                                     MurmurHash3::Calc_CEval("Player"),
                                                                     MurmurHash3::Calc_CEval("ProfileMain"),
                                                                     MurmurHash3::Calc_CEval("SpecialityFruit")}));
     dream_speciality_fruit_offset =     dream_yaml->CalcOffsets(personal_field_type,
-                                                               vector<u32>({
+                                                                vector<u32>({
                                                                     MurmurHash3::Calc_CEval("Player"),
                                                                     MurmurHash3::Calc_CEval("ProfileMain"),
                                                                     MurmurHash3::Calc_CEval("SpecialityFruit")}));
@@ -192,25 +236,25 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
         case MurmurHash3::Calc_CEval("NpcVillager"):
         {
             auto npc = save_npc::get_save_npc(dream_buffer + dream_field_offset, dream_fhi.save_revision, main_fhi.save_revision);
-            util::write_data(main_buffer + field_offset, 0, const_cast<u8 *>(npc.get()->to_bin()), field_size);
+            util::write_data(main_buffer, field_offset, const_cast<u8 *>(npc.get()->to_bin()), field_size);
             break;
         }
         case MurmurHash3::Calc_CEval("LandTime"):
         {
             auto time = save_land_time::get_save_land_time(dream_buffer + dream_field_offset, dream_fhi.save_revision, main_fhi.save_revision);
-            util::write_data(main_buffer + field_offset, 0, const_cast<u8 *>(time.get()->to_bin()), field_size);
+            util::write_data(main_buffer, field_offset, const_cast<u8 *>(time.get()->to_bin()), field_size);
             break;
         }
         case MurmurHash3::Calc_CEval("LandMyDesign"):
         {
             auto my_design = save_land_my_design::get_save_land_my_design(dream_buffer + dream_field_offset, dream_fhi.save_revision, main_fhi.save_revision);
-            util::write_data(main_buffer + field_offset, 0, const_cast<u8 *>(my_design.get()->to_bin()), field_size);
+            util::write_data(main_buffer, field_offset, const_cast<u8 *>(my_design.get()->to_bin()), field_size);
             break;
         }
         case MurmurHash3::Calc_CEval("MainField"):
         {
             auto main_field = save_main_field::get_save_main_field(dream_buffer + dream_field_offset, dream_fhi.save_revision, main_fhi.save_revision);
-            util::write_data(main_buffer + field_offset, 0, const_cast<u8 *>(main_field.get()->to_bin()), field_size);
+            util::write_data(main_buffer, field_offset, const_cast<u8 *>(main_field.get()->to_bin()), field_size);
             break;
         }
         case MurmurHash3::Calc_CEval("PlayerHouseList"):
@@ -235,9 +279,9 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
         {
             u8 *nullbuffer = new u8[field_size]{0};
             // override with zeros first (in case the field we are writing is smaller than the input field)
-            util::write_data(main_buffer + field_offset, 0, nullbuffer, field_size);
+            util::write_data(main_buffer, field_offset, nullbuffer, field_size);
             // write as much data as we can get from the dream_buffer (min value between the two struct sizes)
-            util::write_data(main_buffer + field_offset, 0, dream_buffer + dream_field_offset, min(field_size, dream_field_size));
+            util::write_data(main_buffer, field_offset, dream_buffer + dream_field_offset, min(field_size, dream_field_size));
             delete nullbuffer;
             break;
         }
@@ -257,6 +301,15 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
         util::read_data((ifstream &)player_file, 0, player_buffer, player_file_size);
         player_file.close();
 
+        //preserve NetProfile and parts of ProfileMain (ReportInfo, LanguageCode and Ids)
+        u8 *net_profile_buffer = new u8[net_player_profile_size]{0};
+        util::read_data(player_buffer, net_player_profile_offset, net_profile_buffer, net_player_profile_size);
+
+        // this buffer holds everything after (including) PlayProfileReportInfo
+        size_t size_of_profile_buffer = player_profile_size + player_profile_offset - player_profile_report_info_offset;
+        u8 *profile_buffer = new u8[size_of_profile_buffer]{0};
+        util::read_data(player_buffer, player_profile_report_info_offset, profile_buffer, size_of_profile_buffer);
+
         for(vector<u32> field : personal_fields_to_copy) {
             u64 field_offset = main_yaml->CalcOffsets(personal_field_type, field);
             u64 field_size = main_yaml->GetSize(personal_field_type, field);
@@ -265,9 +318,9 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
 
             u8 *nullbuffer = new u8[field_size]{0};
             // override with zeros first (in case the field we are writing is smaller than the input field)
-            util::write_data(player_buffer + field_offset, 0, nullbuffer, field_size);
+            util::write_data(player_buffer, field_offset, nullbuffer, field_size);
             // write as much data as we can get from the dream_buffer (min value between the two struct sizes)
-            util::write_data(player_buffer + field_offset, 0, dream_buffer + dream_field_offset, min(field_size, dream_field_size));
+            util::write_data(player_buffer, field_offset, dream_buffer + dream_field_offset, min(field_size, dream_field_size));
             delete nullbuffer;
         }
         u8 house_level = 0;
@@ -281,7 +334,9 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
                                                             MurmurHash3::Calc_CEval("PlayerHouseList"),
                                                             MurmurHash3::Calc_CEval("HouseList")})); // this only gives us the size of ONE element so its fine
         util::read_data(main_buffer, house_lvl_offset +  (i * house_size), &house_level, sizeof(house_level));
-        fix_player_(player_buffer, dream_buffer + dream_header_difference + dream_main_size + (i * dream_player_size), house_level);
+        fix_player_(player_buffer, dream_buffer + dream_header_difference + dream_main_size + (i * dream_player_size), house_level, net_profile_buffer, profile_buffer);
+        delete net_profile_buffer;
+        delete profile_buffer;
 
         player_file.open(out_player_personal_path, ios::out | ios::binary);
         util::write_data((ofstream &)player_file, 0, player_buffer, player_file_size);
@@ -313,7 +368,7 @@ void convert_dream::fix_main_(void *main_buffer) {
     delete net_land_profile_buffer;
 }
 
-void convert_dream::fix_player_(void *player_buffer, void *dream_player_buffer, u8 house_level) {
+void convert_dream::fix_player_(void *player_buffer, void *dream_player_buffer, u8 house_level, void const *net_profile_buffer, void const *profile_buffer) {
     //go through the event flags
     map<u16, u16> event_flags_map;
     for (auto const & event_flag : dream_player_event_flags) {
@@ -351,6 +406,11 @@ void convert_dream::fix_player_(void *player_buffer, void *dream_player_buffer, 
     for (u16 i : be_a_chef_recipes) {
         edit_recipe_bit_(player_buffer, i, event_flags_map[1410]);
     }
+
+    // NetProfile and ProfileMain (parts)
+    util::write_data(player_buffer, net_player_profile_offset, net_profile_buffer, net_player_profile_size);
+    util::write_data(player_buffer, player_profile_report_info_offset, profile_buffer, player_profile_size + player_profile_offset - player_profile_report_info_offset);
+
     u16 g_speciality_fruit = 0;
     util::read_data(player_buffer, speciality_fruit_offset, &g_speciality_fruit, sizeof(u16));
     edit_recipe_bit_(player_buffer, town_fruit_smoothies_map.find(g_speciality_fruit)->second, event_flags_map[1410]);

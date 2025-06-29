@@ -36,6 +36,16 @@ private:
     u64 dream_event_flag_land_offset;
     u64 event_flag_player_offset;
     u64 dream_event_flag_player_offset;
+    u64 net_player_profile_offset;
+    u64 net_player_profile_size;
+    u64 dream_net_player_profile_offset;
+    u64 dream_net_player_profile_size;
+    u64 player_profile_offset;
+    u64 player_profile_size;
+    u64 dream_player_profile_offset;
+    u64 dream_player_profile_size;
+    u64 player_profile_report_info_offset;
+    u64 dream_player_profile_report_info_offset;
     u64 speciality_fruit_offset;
     u64 dream_speciality_fruit_offset;
     u64 net_land_profile_offset;
@@ -50,7 +60,11 @@ private:
     void copy_data_(fs::path &out_path, fs::path &dream_file_path);
     void write_landname_(void *dream_buffer, ofstream &landname_file);
     void fix_main_(void *main_buffer);
-    void fix_player_(void *player_buffer, void *dream_player_buffer,  u8 house_level);
+    void fix_player_(void *player_buffer,
+                     void *dream_player_buffer,
+                     u8 house_level,
+                     void const *net_profile_buffer,
+                     void const *profile_buffer);
     void edit_item_collect_bit_(void *player_buffer, u16 collect_bit_offset, bool value);
     void edit_recipe_bit_(void *player_buffer, u16 collect_bit_offset, bool value);
 public:
