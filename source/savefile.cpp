@@ -1,4 +1,10 @@
 #include <savefile.hpp>
+#include <revision_checker.hpp>
+#include <template_check.hpp>
+#include <offsets_logic.hpp>
+#include <SaveCrypto.hpp>
+#include <MurmurHash3.hpp>
+#include <regex>
 
 using namespace std;
 namespace fs = std::filesystem;
