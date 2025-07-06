@@ -36,8 +36,48 @@ target_link_libraries(DreamConverter
     PRIVATE ACNH
     )
 
-set(DO_COPY_SMMH CACHE BOOL OFF)
+add_custom_target(generated_offsets DEPENDS ${CMAKE_SOURCE_DIR}/include/generated_offsets.hpp)
+add_dependencies(DreamConverter generated_offsets)
 
-if(DO_COPY_SMMH)
-    include(CopySmmh.cmake)
-endif(DO_COPY_SMMH)
+option(DREAM_CONVERTER_GENERATE_OFFSETS "Generate offsets for Smmh files" OFF)
+
+if (DREAM_CONVERTER_GENERATE_OFFSETS)
+    message(STATUS "Smmh offset generation is enabled; will generate generated_offsets.hpp")
+
+    add_executable(save_offset_extractor
+        "${CMAKE_CURRENT_SOURCE_DIR}/tools/save_offset_extractor.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tools/smmh_paths_by_revision.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/include/revision_checker.hpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/util.cpp"
+        )
+
+    target_include_directories(save_offset_extractor
+        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
+        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/tools"
+        )
+
+    target_link_libraries(save_offset_extractor
+        PRIVATE ACNH
+        )
+
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/include/generated_offsets.hpp
+        COMMAND save_offset_extractor "${CMAKE_CURRENT_SOURCE_DIR}/include/generated_offsets.hpp"
+        DEPENDS save_offset_extractor
+            # "${CMAKE_CURRENT_SOURCE_DIR}Smmh/S00_111_103.byml"
+            # "${CMAKE_CURRENT_SOURCE_DIR}/Smmh/S00_120_109.byml"
+            # "${CMAKE_CURRENT_SOURCE_DIR}/Smmh/S00_131080_131078.byml"
+            # "${CMAKE_CURRENT_SOURCE_DIR}/Smmh/S00_262152_262146.byml"
+            "${CMAKE_CURRENT_SOURCE_DIR}/Smmh/S00_327691_327681.byml"
+            "${CMAKE_CURRENT_SOURCE_DIR}/Smmh/S00_393228_393217.byml"
+            "${CMAKE_CURRENT_SOURCE_DIR}/Smmh/S00_458758_458753.byml"
+            "${CMAKE_CURRENT_SOURCE_DIR}/Smmh/S00_475141_475137.byml"
+            "${CMAKE_CURRENT_SOURCE_DIR}/Smmh/S00_491521_491521.byml"
+            "${CMAKE_CURRENT_SOURCE_DIR}/Smmh/S00_507910_507905.byml"
+            "${CMAKE_CURRENT_SOURCE_DIR}/Smmh/S00_512004_512001.byml"
+            "${CMAKE_CURRENT_SOURCE_DIR}/Smmh/S00_516097_516097.byml"
+            "${CMAKE_CURRENT_SOURCE_DIR}/Smmh/S00_524421_524297.byml"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating Smmh offsets"
+    )
+endif(DREAM_CONVERTER_GENERATE_OFFSETS)

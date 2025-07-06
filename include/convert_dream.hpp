@@ -1,18 +1,6 @@
 #pragma once
-#include "util.hpp"
-#include "savefile.hpp"
-#include "smmh_paths_by_revision.hpp"
-#include "save_npc.hpp"
-#include "save_land_my_design.hpp"
-#include "save_land_time.hpp"
-#include "save_main_field.hpp"
-#include "save_npc_house_list.hpp"
-#include "save_player_house_list.hpp"
-#include "save_shop.hpp"
-#include <ACNHByaml.hpp>
-#include <chrono>
-#include <thread>
-#include <cmath>
+#include "generated_offsets.hpp"
+#include <filesystem>
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -24,39 +12,13 @@ private:
 
     revision_checker::file_header_info main_fhi;
     revision_checker::file_header_info dream_fhi;
-    ACNHByaml *main_yaml = nullptr;
-    ACNHByaml *dream_yaml = nullptr;
-    u64 main_size;
-    u64 dream_main_size;
-    u64 player_size;
-    u64 dream_player_size;
-    u64 dream_town_name_size;
-    u64 dream_town_name_offset;
-    u64 event_flag_land_offset;
-    u64 dream_event_flag_land_offset;
-    u64 event_flag_player_offset;
-    u64 dream_event_flag_player_offset;
-    u64 net_player_profile_offset;
-    u64 net_player_profile_size;
-    u64 dream_net_player_profile_offset;
-    u64 dream_net_player_profile_size;
-    u64 player_profile_offset;
-    u64 player_profile_size;
-    u64 dream_player_profile_offset;
-    u64 dream_player_profile_size;
-    u64 player_profile_report_info_offset;
-    u64 dream_player_profile_report_info_offset;
-    u64 speciality_fruit_offset;
-    u64 dream_speciality_fruit_offset;
-    u64 net_land_profile_offset;
-    u64 net_land_profile_size;
-    // PlayerOther (not available in dream)
-    u64 item_collect_bit_offset;
-    u64 recipe_collect_bit_offset;
-    u64 storage_size_offset;
-    u64 pocket_1_size_offset;
-    u64 expand_baggage_offset;
-    void setup_(fs::path &executable_path);
+
+    Smmh::Land::VersionedOffsets main_yaml;
+    Smmh::Land::VersionedOffsets dream_yaml;
+    Smmh::Player::VersionedOffsets player_yaml;
+    Smmh::Player::VersionedOffsets dream_player_yaml;
+    Smmh::PlayerOther::VersionedOffsets player_other_yaml;
+    Smmh::PlayerOther::VersionedOffsets dream_player_other_yaml;
     void copy_data_(fs::path &out_path, fs::path &dream_file_path);
     void write_landname_(void *dream_buffer, ofstream &landname_file);
     void fix_main_(void *main_buffer);

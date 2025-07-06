@@ -1,8 +1,6 @@
 #pragma once
-#include <SaveCrypto.hpp>
 #include <revision_checker.hpp>
-#include <template_check.hpp>
-#include <regex>
+#include <filesystem>
 
 using namespace std;
 namespace fs = std::filesystem;
