@@ -14,7 +14,34 @@
 #include <chrono>
 #include <cmath>
 
+void convert_dream::validate_arguments_(fs::path &executable_path, fs::path &template_path, fs::path &dream_path) {
+    if(!fs::exists(executable_path)) {
+        throw std::runtime_error("executable path does not exist");
+    }
+    if(!fs::exists(template_path) || !fs::is_directory(template_path)) {
+        throw std::runtime_error("template path does not exist or is not a directory");
+    }
+    if(!fs::exists(dream_path) || !fs::is_directory(dream_path)) {
+        throw std::runtime_error("dream path does not exist or is not a directory");
+    }
+    if(!fs::exists(dream_path / "dream_land.dat")) {
+        throw std::runtime_error("dream_land.dat does not exist in dream path");
+    }
+    if(!fs::exists(dream_path / "dream_land_meta.json")) {
+        throw std::runtime_error("dream_land_meta.json does not exist in dream path");
+    }
+}
+
 convert_dream::convert_dream(fs::path &executable_path, fs::path &template_path, fs::path &dream_path) {
+    try
+    {
+        validate_arguments_(executable_path, template_path, dream_path);
+    }
+    catch (std::runtime_error &e)
+    {
+        std::cout << "Error: " << e.what() << std::endl;
+        return;
+    }
     player_count = savefile::read_player_count(dream_path);
     u32 revision = savefile::read_32_from_metadata(dream_path, "mAppReleaseVersion");
     dream_fhi = revision_checker::get_revision_info_by_save_revision(revision);
@@ -69,9 +96,9 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
     fs::path main_file_path(out_path / "main.dat");
     fs::path landname_file_path(out_path / "landname.dat");
     vector<fs::path> out_player_paths = savefile::get_player_folders(out_path, g_players);
-    u32 main_file_size = fs::file_size(main_file_path);
-    u32 player_file_size = fs::file_size(out_player_paths[0] / "personal.dat");
-    u32 dream_file_size = fs::file_size(dream_file_path);
+    uintmax_t main_file_size = fs::file_size(main_file_path);
+    uintmax_t player_file_size = fs::file_size(out_player_paths[0] / "personal.dat");
+    uintmax_t dream_file_size = fs::file_size(dream_file_path);
     u8 *main_buffer = new u8[main_file_size];
     u8 *player_buffer = new u8[player_file_size];
     u8 *dream_buffer = new u8[dream_file_size];

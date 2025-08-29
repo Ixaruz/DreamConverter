@@ -4,6 +4,6 @@
 
 *.exe
 
-build/
+build*/
 
 Smmh/

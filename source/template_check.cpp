@@ -87,7 +87,7 @@ namespace template_check {
             }
             if(!revision_found) {
                 res.error_type = error::wrong_revision;
-                cout << "main missing" << endl;
+                cout << "didn't find a matching revision" << endl;
             }
         }
 

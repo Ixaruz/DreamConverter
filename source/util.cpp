@@ -11,7 +11,7 @@ namespace util {
 
     void read_32(ifstream &file, u64 offset, u32 &value) {
         file.seekg(offset, ios::beg);
-        file.readsome((char *)&value, sizeof(u32));
+        file.read((char *)&value, sizeof(u32));
     }
 
     void read_32(void *buffer, u64 offset, u32 &value){
@@ -30,7 +30,7 @@ namespace util {
     void read_data(ifstream &file, u64 offset, void *value, u64 size) {
         if(value != nullptr) {
             file.seekg(offset, ios::beg);
-            file.readsome((char *)value, size);
+            file.read((char *)value, size);
         }
     }
 
