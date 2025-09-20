@@ -2,6 +2,7 @@
 #include "revision_checker.hpp"
 
 #include <filesystem>
+#include <vector>
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -21,7 +22,11 @@ namespace savefile {
 
     void decrypt_pair(fs::path data_path, fs::path header_path, fs::path data_path_out);
 
+    vector<u8> decrypt_pair(vector<u8> const &data_in, vector<u8> const &header_in);
+
     void encrypt_pair(fs::path data_path, fs::path header_path_out, fs::path data_path_out, u32 tick);
+
+    void encrypt_pair(vector<u8> const &data_in, vector<u8> &header_out, vector<u8> &data_out, u32 tick);
 
     void calc_file_hash(fs::path data_path, u16 revision);
 

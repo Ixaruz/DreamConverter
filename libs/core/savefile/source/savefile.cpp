@@ -88,26 +88,41 @@ namespace savefile {
         fstream data_file, header_file;
 
         size_t data_size = fs::file_size(data_path);
-        size_t header_size = sizeof(GSaveVersion);
-        u8 *data = new u8[data_size];
-        GSaveVersion header;
+        size_t header_size = fs::file_size(header_path);
+
+        vector<u8> data = vector<u8>(data_size);
+        vector<u8> header = vector<u8>(header_size);
 
         data_file.open(data_path, ios::in | ios::binary);
-        data_file.read((char *)data, data_size);
+        data_file.read((char *)data.data(), data_size);
         data_file.close();
 
         header_file.open(header_path, ios::in | ios::binary);
-        header_file.read((char *)&header, header_size);
+        header_file.read((char *)header.data(), header_size);
         header_file.close();
 
-        SaveCrypto::Crypt(header, data, data_size);
+        data = decrypt_pair(data, header);
 
         fstream decrypted_data_file;
         decrypted_data_file.open(data_path_out, ios::out | ios::binary | ios::trunc);
-        decrypted_data_file.write((char *)data, data_size);
+        decrypted_data_file.write((char *)data.data(), data.size());
         decrypted_data_file.close();
+    }
 
-        delete data;
+    vector<u8> decrypt_pair(vector<u8> const &data_in, vector<u8> const &header_in)
+    {
+        vector<u8> data_copy(data_in);
+
+        GSaveVersion header;
+        if (header_in.size() != sizeof(header))
+        {
+            throw std::runtime_error("Header size is incorrect");
+        }
+        memcpy(&header, header_in.data(), sizeof(header));
+
+        SaveCrypto::Crypt(header, data_copy.data(), data_copy.size());
+
+        return data_copy;
     }
 
     void encrypt_pair(fs::path data_path, fs::path header_path_out, fs::path data_path_out, u32 tick)
@@ -117,28 +132,51 @@ namespace savefile {
         size_t data_size = fs::file_size(data_path);
         size_t header_size = sizeof(GSaveVersion);
 
-        u8 *data = new u8[data_size];
-        GSaveVersion header;
+        vector<u8> data = vector<u8>(data_size);
+        vector<u8> encrypted_data = vector<u8>(data_size);
+        vector<u8> header = vector<u8>(header_size);
 
         data_file.open(data_path, ios::in | ios::binary);
-        data_file.read((char *)data, data_size);
+        data_file.read((char *)data.data(), data_size);
         data_file.close();
 
-        memcpy(&header, data, sizeof(GSaveVersion) - sizeof(header.headerCrypto));
-
-        SaveCrypto::RegenHeaderCrypto(header, tick);
-        SaveCrypto::Crypt(header, data, data_size);
+        encrypt_pair(data, header, encrypted_data, tick);
 
         fstream encrypted_data_file, encrypted_header_file;
         encrypted_data_file.open(data_path_out, ios::out | ios::binary | ios::trunc);
-        encrypted_data_file.write((char *)data, data_size);
+        encrypted_data_file.write((char *)encrypted_data.data(), data_size);
         encrypted_data_file.close();
 
         encrypted_header_file.open(header_path_out, ios::out | ios::binary | ios::trunc);
-        encrypted_header_file.write((char *)&header, header_size);
+        encrypted_header_file.write((char *)header.data(), header_size);
         encrypted_header_file.close();
+    }
 
-        delete data;
+    void encrypt_pair(vector<u8> const &data_in, vector<u8> &header_out, vector<u8> &data_out, u32 tick)
+    {
+        if (data_in == data_out)
+        {
+            throw std::runtime_error("data_in and data_out cannot be the same vector");
+        }
+        data_out.clear();
+        header_out.clear();
+        size_t data_size = data_in.size();
+
+        vector<u8> data_copy(data_in);
+        GSaveVersion header;
+        constexpr size_t header_size = sizeof(header);
+
+        // update GSaveVersion minus the headerCrypto part
+        memcpy(&header, data_copy.data(), sizeof(GSaveVersion) - sizeof(header.headerCrypto));
+
+        SaveCrypto::RegenHeaderCrypto(header, tick);
+        SaveCrypto::Crypt(header, data_copy.data(), data_size);
+
+        data_out.resize(data_size);
+        memcpy(data_out.data(), data_copy.data(), data_size);
+
+        header_out.resize(header_size);
+        memcpy(header_out.data(), &header, header_size);
     }
 
     void calc_file_hash(fs::path data_path, u16 revision)
