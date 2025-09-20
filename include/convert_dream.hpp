@@ -19,7 +19,6 @@ private:
     Smmh::Player::VersionedOffsets dream_player_yaml;
     Smmh::PlayerOther::VersionedOffsets player_other_yaml;
     Smmh::PlayerOther::VersionedOffsets dream_player_other_yaml;
-    void validate_arguments_(fs::path &executable_path, fs::path &template_path, fs::path &dream_path);
     void copy_data_(fs::path &out_path, fs::path &dream_file_path);
     void write_landname_(void *dream_buffer, ofstream &landname_file);
     void fix_main_(void *main_buffer);

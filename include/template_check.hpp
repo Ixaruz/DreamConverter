@@ -1,7 +1,8 @@
 #pragma once
+#include <util/util.hpp>
+#include <savefile/revision_checker.hpp>
+
 #include <types.hpp>
-#include <util.hpp>
-#include <revision_checker.hpp>
 
 using namespace std;
 namespace fs = std::filesystem;

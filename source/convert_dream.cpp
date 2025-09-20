@@ -1,41 +1,63 @@
-#include <convert_dream.hpp>
+#include "convert_dream.hpp"
 
 #include "offsets_logic.hpp"
-#include "util.hpp"
-#include "savefile.hpp"
-#include "save_npc.hpp"
-#include "save_land_my_design.hpp"
-#include "save_land_time.hpp"
-#include "save_main_field.hpp"
-#include "save_npc_house_list.hpp"
-#include "save_player_house_list.hpp"
-#include "save_shop.hpp"
 #include "template_check.hpp"
+
+#include <util/util.hpp>
+#include <savefile/savefile.hpp>
+#include <save_structs/save_npc.hpp>
+#include <save_structs/save_land_my_design.hpp>
+#include <save_structs/save_land_time.hpp>
+#include <save_structs/save_main_field.hpp>
+#include <save_structs/save_npc_house_list.hpp>
+#include <save_structs/save_player_house_list.hpp>
+#include <save_structs/save_shop.hpp>
 #include <chrono>
 #include <cmath>
 
-void convert_dream::validate_arguments_(fs::path &executable_path, fs::path &template_path, fs::path &dream_path) {
-    if(!fs::exists(executable_path)) {
-        throw std::runtime_error("executable path does not exist");
+namespace { // annonymous
+    void validate_arguments(fs::path &executable_path, fs::path &template_path, fs::path &dream_path) {
+        if(!fs::exists(executable_path)) {
+            throw std::runtime_error("executable path does not exist");
+        }
+        if(!fs::exists(template_path) || !fs::is_directory(template_path)) {
+            throw std::runtime_error("template path does not exist or is not a directory");
+        }
+        if(!fs::exists(dream_path) || !fs::is_directory(dream_path)) {
+            throw std::runtime_error("dream path does not exist or is not a directory");
+        }
+        if(!fs::exists(dream_path / "dream_land.dat")) {
+            throw std::runtime_error("dream_land.dat does not exist in dream path");
+        }
+        if(!fs::exists(dream_path / "dream_land_meta.json")) {
+            throw std::runtime_error("dream_land_meta.json does not exist in dream path");
+        }
     }
-    if(!fs::exists(template_path) || !fs::is_directory(template_path)) {
-        throw std::runtime_error("template path does not exist or is not a directory");
+
+    void check_players(ifstream &dream_file, u64 account_offset, bool *g_players) {
+        for (u8 player = 0; player < 8; player++) {
+            u64 offset = player * 0x48;
+            u128 account_uid = 0;
+            util::read_data(dream_file, dream_header_difference + account_offset + offset, &account_uid, 0x10);
+            if (account_uid != 0) g_players[player] = true;
+        }
     }
-    if(!fs::exists(dream_path) || !fs::is_directory(dream_path)) {
-        throw std::runtime_error("dream path does not exist or is not a directory");
-    }
-    if(!fs::exists(dream_path / "dream_land.dat")) {
-        throw std::runtime_error("dream_land.dat does not exist in dream path");
-    }
-    if(!fs::exists(dream_path / "dream_land_meta.json")) {
-        throw std::runtime_error("dream_land_meta.json does not exist in dream path");
+
+    vector<fs::path> get_player_folders(fs::path folder, bool *g_players) {
+        vector<fs::path> player_folders;
+        for (u8 player = 0; player < 8; player++) {
+            if(g_players[player]) {
+                player_folders.push_back(fs::path(folder / ("Villager" + to_string(player))));
+            }
+        }
+        return player_folders;
     }
 }
 
 convert_dream::convert_dream(fs::path &executable_path, fs::path &template_path, fs::path &dream_path) {
     try
     {
-        validate_arguments_(executable_path, template_path, dream_path);
+        validate_arguments(executable_path, template_path, dream_path);
     }
     catch (std::runtime_error &e)
     {
@@ -54,7 +76,7 @@ convert_dream::convert_dream(fs::path &executable_path, fs::path &template_path,
     ifstream dream_file;
     fs::path dream_file_path = fs::path(dream_path / "dream_land.dat");
     dream_file.open(dream_file_path, ios::in | ios::binary);
-    savefile::check_players(dream_file, dream_yaml.PlayerVillagerAccountTable.offset, g_players);
+    check_players(dream_file, dream_yaml.PlayerVillagerAccountTable.offset, g_players);
     dream_file.close();
 
     template_check::template_check tc(template_path, g_players);
@@ -95,7 +117,7 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
 
     fs::path main_file_path(out_path / "main.dat");
     fs::path landname_file_path(out_path / "landname.dat");
-    vector<fs::path> out_player_paths = savefile::get_player_folders(out_path, g_players);
+    vector<fs::path> out_player_paths = get_player_folders(out_path, g_players);
     uintmax_t main_file_size = fs::file_size(main_file_path);
     uintmax_t player_file_size = fs::file_size(out_player_paths[0] / "personal.dat");
     uintmax_t dream_file_size = fs::file_size(dream_file_path);

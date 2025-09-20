@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.22)
 
 if(DEFINED BUILD_VERSION)
     set(PROJECT_VERSION ${BUILD_VERSION})
@@ -14,6 +14,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 # include subdirectory
 add_subdirectory(libs)
+add_subdirectory(tools)
 
 file(GLOB SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/source/*.c*"
@@ -33,32 +34,17 @@ target_include_directories(DreamConverter
     )
 
 target_link_libraries(DreamConverter
+    PRIVATE Core
     PRIVATE ACNH
     )
 
-add_custom_target(generated_offsets DEPENDS ${CMAKE_SOURCE_DIR}/include/generated_offsets.hpp)
+add_custom_target(generated_offsets DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/include/generated_offsets.hpp)
 add_dependencies(DreamConverter generated_offsets)
 
 option(DREAM_CONVERTER_GENERATE_OFFSETS "Generate offsets for Smmh files" OFF)
 
 if (DREAM_CONVERTER_GENERATE_OFFSETS)
     message(STATUS "Smmh offset generation is enabled; will generate generated_offsets.hpp")
-
-    add_executable(save_offset_extractor
-        "${CMAKE_CURRENT_SOURCE_DIR}/tools/save_offset_extractor.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tools/smmh_paths_by_revision.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/include/revision_checker.hpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/source/util.cpp"
-        )
-
-    target_include_directories(save_offset_extractor
-        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
-        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/tools"
-        )
-
-    target_link_libraries(save_offset_extractor
-        PRIVATE ACNH
-        )
 
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/include/generated_offsets.hpp
