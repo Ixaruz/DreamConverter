@@ -6,6 +6,8 @@
 
 #include <types.hpp>
 
+#include <limits>
+
 namespace Smmh {
 
 struct OffsetSize {
@@ -698,6 +700,6 @@ constexpr u64 get_all_versions_index(revision_checker::file_header_info fhi) {
             return i;
         }
     }
-    return 0x0;
+    return std::numeric_limits<u64>::max();
 }
 } // Smmh
