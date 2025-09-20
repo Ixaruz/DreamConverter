@@ -1,8 +1,15 @@
 # build.yml
 name: Build
-
 on:
-  push: # any branch
+  push:
+    branches: [ master ]
+
+  workflow_dispatch:
+    inputs:
+      BUILD_VERSION:
+        description: 'Version of the build'
+        required: false
+        default: '0.0.0'
 
 jobs:
   build:
@@ -16,12 +23,12 @@ jobs:
             submodules: recursive
       - name: build application
         run: |
-          cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
-          ninja -C build DreamConverter -j $(($(nproc) + 1))
+          cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -D BUILD_VERSION=${{ github.event.inputs.BUILD_VERSION }}
+          ninja -C build package -j $(($(nproc) + 1))
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: DreamConverter
           path: |
-            build/DreamConverter
+            build/DreamConverter-*.tar.gz
 
