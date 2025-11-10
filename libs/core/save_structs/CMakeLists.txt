@@ -35,3 +35,7 @@ target_include_directories(Core_SaveStructs
 target_link_libraries(Core_SaveStructs
     PUBLIC ACNH
     )
+
+if(WIN32)
+    set_target_properties(Core_SaveStructs PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()

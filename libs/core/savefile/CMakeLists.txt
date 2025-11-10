@@ -25,3 +25,7 @@ target_link_libraries(Core_SaveFile
     PUBLIC ACNH
     PRIVATE Core_Util
     )
+
+if(WIN32)
+    set_target_properties(Core_SaveFile PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()

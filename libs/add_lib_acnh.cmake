@@ -16,3 +16,7 @@ add_library(ACNH SHARED EXCLUDE_FROM_ALL
 target_include_directories(ACNH
     PUBLIC "${LIB_ACNH_PATH}/include"
     )
+
+if(WIN32)
+    set_target_properties(ACNH PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()

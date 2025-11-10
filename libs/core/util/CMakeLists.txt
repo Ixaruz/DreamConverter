@@ -20,3 +20,7 @@ target_include_directories(Core_Util
 target_link_libraries(Core_Util
     PUBLIC ACNH
     )
+
+if(WIN32)
+    set_target_properties(Core_Util PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
