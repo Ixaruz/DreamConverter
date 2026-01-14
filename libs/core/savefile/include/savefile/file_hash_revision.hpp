@@ -570,3 +570,57 @@ static file_hash_info  REV_200 = file_hash_info (std::vector<file_hash_details*>
         new file_hash_region(0x100, 0xB8A3DC),
     }),
 } );
+
+const u32 REV_300_MAIN = 0x9B0E90;
+const u32 REV_300_PERSONAL = 0x74A40;
+const u32 REV_300_POSTBOX = 0x64140;
+const u32 REV_300_PHOTO = 0x2F650;
+const u32 REV_300_PROFILE = 0x69560;
+const u32 REV_300_WHEREAREN = 0xB8A4E0;
+
+static file_hash_info  REV_300 = file_hash_info (std::vector<file_hash_details*>
+{
+    new file_hash_details(FN_MAIN, REV_300_MAIN, std::vector<file_hash_region*>
+    {
+        new file_hash_region(0x000110, 0x1e339c),
+        new file_hash_region(0x1e34b0, 0x3d089c),
+        new file_hash_region(0x5b3e60, 0x037acc),
+        new file_hash_region(0x5eb930, 0x03ce5c),
+        new file_hash_region(0x6288a0, 0x037acc),
+        new file_hash_region(0x660370, 0x03ce5c),
+        new file_hash_region(0x69d2e0, 0x037acc),
+        new file_hash_region(0x6d4db0, 0x03ce5c),
+        new file_hash_region(0x711d20, 0x037acc),
+        new file_hash_region(0x7497f0, 0x03ce5c),
+        new file_hash_region(0x786760, 0x037acc),
+        new file_hash_region(0x7be230, 0x03ce5c),
+        new file_hash_region(0x7fb1a0, 0x037acc),
+        new file_hash_region(0x832c70, 0x03ce5c),
+        new file_hash_region(0x86fbe0, 0x037acc),
+        new file_hash_region(0x8a76b0, 0x03ce5c),
+        new file_hash_region(0x8e4620, 0x037acc),
+        new file_hash_region(0x91c0f0, 0x03ce5c),
+        new file_hash_region(0x958f50, 0x057f3c),
+    }),
+    new file_hash_details(FN_PERSONAL, REV_300_PERSONAL, std::vector<file_hash_region*>
+    {
+        new file_hash_region(0x00110, 0x37acc),
+        new file_hash_region(0x37be0, 0x3ce5c),
+    }),
+    new file_hash_details(FN_POSTBOX, REV_300_POSTBOX, std::vector<file_hash_region*>
+    {
+        new file_hash_region(0x100, 0x4732c),
+    }),
+    new file_hash_details(FN_PHOTO, REV_300_PHOTO, std::vector<file_hash_region*>
+    {
+        new file_hash_region(0x100, 0x2f54c),
+    }),
+    new file_hash_details(FN_PROFILE, REV_300_PROFILE, std::vector<file_hash_region*>
+    {
+        new file_hash_region(0x100, 0x6945c),
+    }),
+    new file_hash_details(FN_WHEREAREN, REV_300_WHEREAREN, std::vector<file_hash_region*>
+    {
+        new file_hash_region(0x100, 0xB8A3DC),
+    }),
+} );

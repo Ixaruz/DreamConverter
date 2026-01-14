@@ -379,6 +379,42 @@ constexpr VersionedOffsets AllVersions[] = {
         .VisitorNpc = { 0x462158, 0x78 },
         .Weather = { 0x1e3700, 0x14c },
     },
+    {
+        .revision_info = { 0xa0002, 0xa0028, 0x2, 0x0, 2, 0x1f },
+        .AirportThemeColor = { 0x575dc0, 0x1 },
+        .BulletinBoard = { 0x4951b8, 0xe0ae8 },
+        .CalendarEventRegion = { 0x575ca4, 0x4 },
+        .CampSite = { 0x575ca8, 0x4 },
+        .EventFlag = { 0x22ed00, 0x800 },
+        .Fg = { 0x494870, 0x928 },
+        .HouseList = { 0x33cbe0, 0x28a28 },
+        .ItemMarketingRoute = { 0x495198, 0x2 },
+        .Land = { 0x110, 0x5b3c40 },
+        .LandId = { 0x1e3938, 0x1c },
+        .LandMyDesign = { 0x1e3958, 0x4b3a8 },
+        .LandTime = { 0x1e3850, 0xe8 },
+        .MainField = { 0x22f500, 0x10d6e0 },
+        .Museum = { 0x491220, 0x3404 },
+        .NetLandProfile = { 0x578548, 0x58 },
+        .NpcCamp = { 0x575cac, 0x114 },
+        .NpcHouseList = { 0x481d20, 0xbd10 },
+        .NpcVillager = { 0x120, 0x1e3388 },
+        .Office = { 0x4951b0, 0x4 },
+        .PlayerHouseList = { 0x33cbe0, 0x145140 },
+        .PlayerVillagerAccountTable = { 0x1e34c0, 0x240 },
+        .PublicWorksLoan = { 0x5782e4, 0x8 },
+        .PublicWorksName = { 0x5782ec, 0x8 },
+        .RegionLanguage = { 0x575ca0, 0x4 },
+        .RumorFavorite = { 0x575dc2, 0x2520 },
+        .SettlerQuest = { 0x5786b4, 0xc0 },
+        .Shop = { 0x48da30, 0x37f0 },
+        .SnowManFamily = { 0x4946b8, 0x1b8 },
+        .TownName = { 0x1e393c, 0x14 },
+        .VillageMelody = { 0x4951a0, 0x10 },
+        .VillageScore = { 0x5782f4, 0x254 },
+        .VisitorNpc = { 0x494624, 0x94 },
+        .Weather = { 0x1e3700, 0x14c },
+    },
 };
 } // Land
 
@@ -389,6 +425,7 @@ struct VersionedOffsets {
     OffsetSize BirthdayLiveDate;
     OffsetSize BirthdayLiveMsgList;
     OffsetSize EventFlag;
+    OffsetSize GalleryItem;
     OffsetSize GalleryLandId;
     OffsetSize LastBirthdayYear;
     OffsetSize LastPlayDate;
@@ -399,11 +436,11 @@ struct VersionedOffsets {
     OffsetSize Player;
     OffsetSize PlayerId;
     OffsetSize PlayerProfileReportInfo;
+    OffsetSize PreviousLandId;
     OffsetSize ProfileMain;
     OffsetSize SpecialityFruit;
     OffsetSize _18fdb93f;
     OffsetSize _5d1fcb04;
-    OffsetSize _d35a9251;
 };
 
 constexpr VersionedOffsets AllVersions[] = {
@@ -413,6 +450,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .BirthdayLiveDate = { 0x34c8a, 0x4 },
         .BirthdayLiveMsgList = { 0x34c90, 0x1180 },
         .EventFlag = { 0xb0f0, 0x1000 },
+        .GalleryItem = { 0x35e10, 0x8 },
         .GalleryLandId = { 0x35e18, 0x1c },
         .LastBirthdayYear = { 0x34c88, 0x2 },
         .LastPlayDate = { 0x34c84, 0x4 },
@@ -423,11 +461,11 @@ constexpr VersionedOffsets AllVersions[] = {
         .Player = { 0x110, 0x35d30 },
         .PlayerId = { 0xb0b8, 0x38 },
         .PlayerProfileReportInfo = { 0x34888, 0x28 },
+        .PreviousLandId = { 0x110, 0x0 },
         .ProfileMain = { 0x117b0, 0x234d0 },
         .SpecialityFruit = { 0x3480c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
         ._5d1fcb04 = { 0x34c80, 0x1 },
-        ._d35a9251 = { 0x110, 0x10 },
     },
     {
         .revision_info = { 0x60001, 0x6000c, 0x2, 0x0, 2, 0xd },
@@ -435,6 +473,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .BirthdayLiveDate = { 0x3588a, 0x4 },
         .BirthdayLiveMsgList = { 0x35890, 0x1180 },
         .EventFlag = { 0xb0f0, 0x1000 },
+        .GalleryItem = { 0x36a10, 0x8 },
         .GalleryLandId = { 0x36a18, 0x1c },
         .LastBirthdayYear = { 0x35888, 0x2 },
         .LastPlayDate = { 0x35884, 0x4 },
@@ -445,11 +484,11 @@ constexpr VersionedOffsets AllVersions[] = {
         .Player = { 0x110, 0x36940 },
         .PlayerId = { 0xb0b8, 0x38 },
         .PlayerProfileReportInfo = { 0x35488, 0x28 },
+        .PreviousLandId = { 0x36a34, 0x1c },
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
         ._5d1fcb04 = { 0x35880, 0x1 },
-        ._d35a9251 = { 0x110, 0x10 },
     },
     {
         .revision_info = { 0x70001, 0x70006, 0x2, 0x0, 2, 0xf },
@@ -457,6 +496,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .BirthdayLiveDate = { 0x3588a, 0x4 },
         .BirthdayLiveMsgList = { 0x35890, 0x1180 },
         .EventFlag = { 0xb0f0, 0x1000 },
+        .GalleryItem = { 0x36a10, 0x8 },
         .GalleryLandId = { 0x36a18, 0x1c },
         .LastBirthdayYear = { 0x35888, 0x2 },
         .LastPlayDate = { 0x35884, 0x4 },
@@ -467,11 +507,11 @@ constexpr VersionedOffsets AllVersions[] = {
         .Player = { 0x110, 0x36940 },
         .PlayerId = { 0xb0b8, 0x38 },
         .PlayerProfileReportInfo = { 0x35488, 0x28 },
+        .PreviousLandId = { 0x36a34, 0x1c },
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
         ._5d1fcb04 = { 0x35880, 0x1 },
-        ._d35a9251 = { 0x110, 0x10 },
     },
     {
         .revision_info = { 0x74001, 0x74005, 0x2, 0x0, 2, 0x10 },
@@ -479,6 +519,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .BirthdayLiveDate = { 0x3588a, 0x4 },
         .BirthdayLiveMsgList = { 0x35890, 0x1180 },
         .EventFlag = { 0xb0f0, 0x1000 },
+        .GalleryItem = { 0x36a10, 0x8 },
         .GalleryLandId = { 0x36a18, 0x1c },
         .LastBirthdayYear = { 0x35888, 0x2 },
         .LastPlayDate = { 0x35884, 0x4 },
@@ -489,11 +530,11 @@ constexpr VersionedOffsets AllVersions[] = {
         .Player = { 0x110, 0x36940 },
         .PlayerId = { 0xb0b8, 0x38 },
         .PlayerProfileReportInfo = { 0x35488, 0x28 },
+        .PreviousLandId = { 0x36a34, 0x1c },
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
         ._5d1fcb04 = { 0x35880, 0x1 },
-        ._d35a9251 = { 0x110, 0x10 },
     },
     {
         .revision_info = { 0x78001, 0x78001, 0x2, 0x0, 2, 0x11 },
@@ -501,6 +542,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .BirthdayLiveDate = { 0x3588a, 0x4 },
         .BirthdayLiveMsgList = { 0x35890, 0x1180 },
         .EventFlag = { 0xb0f0, 0x1000 },
+        .GalleryItem = { 0x36a10, 0x8 },
         .GalleryLandId = { 0x36a18, 0x1c },
         .LastBirthdayYear = { 0x35888, 0x2 },
         .LastPlayDate = { 0x35884, 0x4 },
@@ -511,11 +553,11 @@ constexpr VersionedOffsets AllVersions[] = {
         .Player = { 0x110, 0x36940 },
         .PlayerId = { 0xb0b8, 0x38 },
         .PlayerProfileReportInfo = { 0x35488, 0x28 },
+        .PreviousLandId = { 0x36a34, 0x1c },
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
         ._5d1fcb04 = { 0x35880, 0x1 },
-        ._d35a9251 = { 0x110, 0x10 },
     },
     {
         .revision_info = { 0x7c001, 0x7c006, 0x2, 0x0, 2, 0x12 },
@@ -523,6 +565,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .BirthdayLiveDate = { 0x3588a, 0x4 },
         .BirthdayLiveMsgList = { 0x35890, 0x1180 },
         .EventFlag = { 0xb0f0, 0x1000 },
+        .GalleryItem = { 0x36a10, 0x8 },
         .GalleryLandId = { 0x36a18, 0x1c },
         .LastBirthdayYear = { 0x35888, 0x2 },
         .LastPlayDate = { 0x35884, 0x4 },
@@ -533,11 +576,11 @@ constexpr VersionedOffsets AllVersions[] = {
         .Player = { 0x110, 0x36940 },
         .PlayerId = { 0xb0b8, 0x38 },
         .PlayerProfileReportInfo = { 0x35488, 0x28 },
+        .PreviousLandId = { 0x36a34, 0x1c },
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
         ._5d1fcb04 = { 0x35880, 0x1 },
-        ._d35a9251 = { 0x110, 0x10 },
     },
     {
         .revision_info = { 0x7d001, 0x7d004, 0x2, 0x0, 2, 0x13 },
@@ -545,6 +588,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .BirthdayLiveDate = { 0x3588a, 0x4 },
         .BirthdayLiveMsgList = { 0x35890, 0x1180 },
         .EventFlag = { 0xb0f0, 0x1000 },
+        .GalleryItem = { 0x36a10, 0x8 },
         .GalleryLandId = { 0x36a18, 0x1c },
         .LastBirthdayYear = { 0x35888, 0x2 },
         .LastPlayDate = { 0x35884, 0x4 },
@@ -555,11 +599,11 @@ constexpr VersionedOffsets AllVersions[] = {
         .Player = { 0x110, 0x36940 },
         .PlayerId = { 0xb0b8, 0x38 },
         .PlayerProfileReportInfo = { 0x35488, 0x28 },
+        .PreviousLandId = { 0x36a34, 0x1c },
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
         ._5d1fcb04 = { 0x35880, 0x1 },
-        ._d35a9251 = { 0x110, 0x10 },
     },
     {
         .revision_info = { 0x7e001, 0x7e001, 0x2, 0x0, 2, 0x14 },
@@ -567,6 +611,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .BirthdayLiveDate = { 0x3588a, 0x4 },
         .BirthdayLiveMsgList = { 0x35890, 0x1180 },
         .EventFlag = { 0xb0f0, 0x1000 },
+        .GalleryItem = { 0x36a10, 0x8 },
         .GalleryLandId = { 0x36a18, 0x1c },
         .LastBirthdayYear = { 0x35888, 0x2 },
         .LastPlayDate = { 0x35884, 0x4 },
@@ -577,11 +622,11 @@ constexpr VersionedOffsets AllVersions[] = {
         .Player = { 0x110, 0x36940 },
         .PlayerId = { 0xb0b8, 0x38 },
         .PlayerProfileReportInfo = { 0x35488, 0x28 },
+        .PreviousLandId = { 0x36a34, 0x1c },
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
         ._5d1fcb04 = { 0x35880, 0x1 },
-        ._d35a9251 = { 0x110, 0x10 },
     },
     {
         .revision_info = { 0x80009, 0x80085, 0x2, 0x0, 2, 0x16 },
@@ -589,6 +634,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .BirthdayLiveDate = { 0x3588a, 0x4 },
         .BirthdayLiveMsgList = { 0x35890, 0x1180 },
         .EventFlag = { 0xb0f0, 0x1000 },
+        .GalleryItem = { 0x36a10, 0x8 },
         .GalleryLandId = { 0x36a18, 0x1c },
         .LastBirthdayYear = { 0x35888, 0x2 },
         .LastPlayDate = { 0x35884, 0x4 },
@@ -599,11 +645,34 @@ constexpr VersionedOffsets AllVersions[] = {
         .Player = { 0x110, 0x36940 },
         .PlayerId = { 0xb0b8, 0x38 },
         .PlayerProfileReportInfo = { 0x35488, 0x28 },
+        .PreviousLandId = { 0x36a34, 0x1c },
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
         ._5d1fcb04 = { 0x35880, 0x1 },
-        ._d35a9251 = { 0x110, 0x10 },
+    },
+    {
+        .revision_info = { 0xa0002, 0xa0028, 0x2, 0x0, 2, 0x1f },
+        .BirthDay = { 0x1352c, 0x2 },
+        .BirthdayLiveDate = { 0x36a1a, 0x4 },
+        .BirthdayLiveMsgList = { 0x36a20, 0x1180 },
+        .EventFlag = { 0xc280, 0x1000 },
+        .GalleryItem = { 0x37ba0, 0x8 },
+        .GalleryLandId = { 0x37ba8, 0x1c },
+        .LastBirthdayYear = { 0x36a18, 0x2 },
+        .LastPlayDate = { 0x36a14, 0x4 },
+        .LifeSupport = { 0xd280, 0x62ac },
+        .LookPack = { 0x128, 0xc120 },
+        .NetProfile = { 0x13530, 0x10 },
+        .PastDaysFromMade = { 0x1352e, 0x2 },
+        .Player = { 0x110, 0x37ad0 },
+        .PlayerId = { 0xc248, 0x38 },
+        .PlayerProfileReportInfo = { 0x36618, 0x28 },
+        .PreviousLandId = { 0x37bc4, 0x1c },
+        .ProfileMain = { 0x13540, 0x234d0 },
+        .SpecialityFruit = { 0x3659c, 0x8 },
+        ._18fdb93f = { 0x120, 0x1 },
+        ._5d1fcb04 = { 0x36a10, 0x1 },
     },
 };
 } // Player
@@ -690,6 +759,14 @@ constexpr VersionedOffsets AllVersions[] = {
         .Pocket1Size = { 0x36b00, 0x4 },
         .RecipeCollectBit = { 0x5b55c, 0x100 },
         .StorageSize = { 0x4081c, 0x4 },
+    },
+    {
+        .revision_info = { 0xa0002, 0xa0028, 0x2, 0x0, 2, 0x1f },
+        .ExpandBaggage = { 0x37d68, 0x1 },
+        .ItemCollectBit = { 0x49938, 0x754 },
+        .Pocket1Size = { 0x37c90, 0x4 },
+        .RecipeCollectBit = { 0x6528c, 0x100 },
+        .StorageSize = { 0x496ac, 0x4 },
     },
 };
 } // PlayerOther

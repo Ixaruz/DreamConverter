@@ -105,7 +105,6 @@ int main(int argc, char **argv)
             Calc_CEval("::Game::SavePersonal"),
             {
                 {"Player", {Calc_CEval("Player")}},
-                {"_d35a9251", {Calc_CEval("Player"), 3545928273 /*_d35a9251*/ /*Code : u32*/}},
                 {"_18fdb93f", {Calc_CEval("Player"), 419281215 /*_18fdb93f*/ /*s8*/}},
                 {"LookPack", {Calc_CEval("Player"), Calc_CEval("LookPack")}},
                 {"PlayerId", {Calc_CEval("Player"), Calc_CEval("PlayerId")}},
@@ -122,7 +121,9 @@ int main(int argc, char **argv)
                 {"BirthdayLiveDate", {Calc_CEval("Player"), Calc_CEval("BirthdayLiveDate")}},
                 {"BirthdayLiveMsgList", {Calc_CEval("Player"), Calc_CEval("BirthdayLiveMsgList")}},
                 {"GalleryLandId", {Calc_CEval("Player"), Calc_CEval("GalleryLandId")}},
+                {"GalleryItem", {Calc_CEval("Player"), Calc_CEval("GalleryItem")}},
                 {"NetProfile", {Calc_CEval("Player"), Calc_CEval("NetProfile")}},
+                {"PreviousLandId", {Calc_CEval("Player"), Calc_CEval("PreviousLandId")}},
             }
         },
         {

@@ -30,6 +30,7 @@ namespace revision_checker{
         new save_file_sizes{REV_1100_MAIN,REV_1100_PERSONAL,REV_1100_PHOTO,REV_1100_POSTBOX,REV_1100_PROFILE},// 1.10.0
         new save_file_sizes{REV_1110_MAIN,REV_1110_PERSONAL,REV_1110_PHOTO,REV_1110_POSTBOX,REV_1110_PROFILE},// 1.11.0
         new save_file_sizes{REV_200_MAIN, REV_200_PERSONAL, REV_200_PHOTO, REV_200_POSTBOX, REV_200_PROFILE, REV_200_WHEREAREN}, // 2.0.0
+        new save_file_sizes{REV_300_MAIN, REV_300_PERSONAL, REV_300_PHOTO, REV_300_POSTBOX, REV_300_PROFILE, REV_300_WHEREAREN}, // 3.0.0
     };
 
     typedef struct {
@@ -77,6 +78,7 @@ namespace revision_checker{
         file_header_info { 0x80009, 0x80085, 2, 0, 2, 28 }, // 2.0.6
         file_header_info { 0x80009, 0x80085, 2, 0, 2, 29 }, // 2.0.7
         file_header_info { 0x80009, 0x80085, 2, 0, 2, 30 }, // 2.0.8
+        file_header_info { 0xA0002, 0xA0028, 2, 0, 2, 31 }, // 3.0.0
     };
 
     inline static file_header_info get_revision_info_by_save_revision(int revision) {
@@ -116,6 +118,7 @@ namespace revision_checker{
         sizes_by_revision[12], // 2.0.6
         sizes_by_revision[12], // 2.0.7
         sizes_by_revision[12], // 2.0.8
+        sizes_by_revision[13], // 3.0.0
     };
 
     static std::vector<file_hash_info> hash_info = std::vector<file_hash_info>
@@ -151,5 +154,6 @@ namespace revision_checker{
         REV_200, // 2.0.6
         REV_200, // 2.0.7
         REV_200, // 2.0.8
+        REV_300, // 3.0.0
     };
 }
