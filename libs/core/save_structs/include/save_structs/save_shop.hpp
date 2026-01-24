@@ -13,7 +13,8 @@ namespace save_shop {
     //     type_3, //1.6.0 ShopTailor + 0x50 (XmasItem * 10); ShopZakka + 0x80 (XmasItem * 16)
     //     type_4, //1.7.0 ShopTailor + 0x50 (CarnivalItem * 10); ShopZakka + 0x80 (CarnivalItem * 16); ShopCatalog + 0x100 (ValentineLog * 16 + ValentineItem * 16)
     //     type_5, //1.9.0 ShopTailor + 0x50 (PromItem * 10); ShopZakka + 0x40 (EasterItem * 8)
-    //     type_6 //2.0.0 added ShopCommune; + 0x384
+    //     type_6, //2.0.0 added ShopCommune; + 0x384
+    //     type_7, //3.0.0 added ShopHotel; + 0xB8
     // };
 
     // Interface class
@@ -139,6 +140,25 @@ namespace save_shop {
         std::unique_ptr<save_shop> downgrade() override;
     private:
         static const int m_size = 0x3738;
+        u8 m_buffer[m_size];
+    };
+
+    class save_shop_7 : public save_shop {
+    protected:
+    public:
+        u8 const *to_bin() override;
+        int get_size() override;
+
+        save_shop_7() = default;
+        save_shop_7(const save_shop_7&) = default;
+        save_shop_7(save_shop_7&&) = default;
+        save_shop_7(u8 *data);
+        void from_data(u8 *data) override;
+
+        std::unique_ptr<save_shop> upgrade() override;
+        std::unique_ptr<save_shop> downgrade() override;
+    private:
+        static const int m_size = 0x37F0;
         u8 m_buffer[m_size];
     };
 

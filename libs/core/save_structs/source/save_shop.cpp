@@ -10,7 +10,8 @@ namespace save_shop
         15, //1.6.0
         16, //1.7.0
         18, //1.9.0
-        22  //2.0.0
+        22, //2.0.0
+        31, //3.0.0
     };
 
     static std::map<u16, std::function<std::unique_ptr<save_shop>(u8*)>> constructors =
@@ -20,7 +21,8 @@ namespace save_shop
         {15, [](u8* data){ return std::make_unique<save_shop_3>(data); }},
         {16, [](u8* data){ return std::make_unique<save_shop_4>(data); }},
         {18, [](u8* data){ return std::make_unique<save_shop_5>(data); }},
-        {22, [](u8* data){ return std::make_unique<save_shop_6>(data); }}
+        {22, [](u8* data){ return std::make_unique<save_shop_6>(data); }},
+        {31, [](u8* data){ return std::make_unique<save_shop_7>(data); }},
     };
 
     u8 const *save_shop_1::to_bin() { return m_buffer; }
@@ -29,6 +31,7 @@ namespace save_shop
     u8 const *save_shop_4::to_bin() { return m_buffer; }
     u8 const *save_shop_5::to_bin() { return m_buffer; }
     u8 const *save_shop_6::to_bin() { return m_buffer; }
+    u8 const *save_shop_7::to_bin() { return m_buffer; }
 
     int save_shop_1::get_size() { return m_size; }
     int save_shop_2::get_size() { return m_size; }
@@ -36,6 +39,7 @@ namespace save_shop
     int save_shop_4::get_size() { return m_size; }
     int save_shop_5::get_size() { return m_size; }
     int save_shop_6::get_size() { return m_size; }
+    int save_shop_7::get_size() { return m_size; }
 
     void save_shop_1::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
     void save_shop_2::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
@@ -43,6 +47,7 @@ namespace save_shop
     void save_shop_4::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
     void save_shop_5::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
     void save_shop_6::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
+    void save_shop_7::from_data (u8 *data) { memcpy(m_buffer, data, m_size); }
 
     save_shop_1::save_shop_1 (u8 *data) { this->from_data(data); }
     save_shop_2::save_shop_2 (u8 *data) { this->from_data(data); }
@@ -50,6 +55,7 @@ namespace save_shop
     save_shop_4::save_shop_4 (u8 *data) { this->from_data(data); }
     save_shop_5::save_shop_5 (u8 *data) { this->from_data(data); }
     save_shop_6::save_shop_6 (u8 *data) { this->from_data(data); }
+    save_shop_7::save_shop_7 (u8 *data) { this->from_data(data); }
 
     std::unique_ptr<save_shop> save_shop_1::downgrade()
     {
@@ -176,6 +182,16 @@ namespace save_shop
         res->from_data(buffer);
         delete buffer;
         return std::make_unique<save_shop_5>(*(res));
+    }
+
+    std::unique_ptr<save_shop> save_shop_7::downgrade() {
+        save_shop_6 *res = new save_shop_6();
+        u8 *buffer = new u8[res->get_size()]{0};
+        //everything before ShopHotel
+        memcpy(buffer, m_buffer, res->get_size());
+        res->from_data(buffer);
+        delete buffer;
+        return std::make_unique<save_shop_6>(*(res));
     }
 
     ////UPGRADE/////
@@ -306,9 +322,20 @@ namespace save_shop
         return std::make_unique<save_shop_6>(*(res));
     }
 
-    std::unique_ptr<save_shop> save_shop_6::upgrade()
+    std::unique_ptr<save_shop> save_shop_6::upgrade() {
+        save_shop_7 *res = new save_shop_7();
+        u8 *buffer = new u8[res->get_size()]{0};
+        //everything before ShopHotel
+        // The Lion doesn't concern himself with data inside ShopHotel; the game can fill it on the next day.
+        memcpy((u8 *)buffer, m_buffer, res->get_size());
+        res->from_data(buffer);
+        delete buffer;
+        return std::make_unique<save_shop_7>(*(res));
+    }
+
+    std::unique_ptr<save_shop> save_shop_7::upgrade()
     {
-        return std::make_unique<save_shop_6>(*(this));
+        return std::make_unique<save_shop_7>(*(this));
     }
 
     std::unique_ptr<save_shop> get_save_shop(u8 *data, u16 revision_in, u16 revision_out)

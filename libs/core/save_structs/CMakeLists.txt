@@ -9,6 +9,7 @@ set(SOURCES
     "${LIB_SAVE_STRUCTS_PATH}/source/save_npc.cpp"
     "${LIB_SAVE_STRUCTS_PATH}/source/save_player_house_list.cpp"
     "${LIB_SAVE_STRUCTS_PATH}/source/save_shop.cpp"
+    "${LIB_SAVE_STRUCTS_PATH}/source/buffer_converter.cpp"
     )
 
 set(HEADERS
@@ -21,6 +22,7 @@ set(HEADERS
     "${LIB_SAVE_STRUCTS_PATH}/include/save_structs/save_npc.hpp"
     "${LIB_SAVE_STRUCTS_PATH}/include/save_structs/save_player_house_list.hpp"
     "${LIB_SAVE_STRUCTS_PATH}/include/save_structs/save_shop.hpp"
+    "${LIB_SAVE_STRUCTS_PATH}/include/save_structs/buffer_converter.hpp"
     )
 
 add_library(Core_SaveStructs SHARED EXCLUDE_FROM_ALL
