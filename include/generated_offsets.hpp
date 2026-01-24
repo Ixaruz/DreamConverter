@@ -53,6 +53,7 @@ struct VersionedOffsets {
     OffsetSize VillageScore;
     OffsetSize VisitorNpc;
     OffsetSize Weather;
+    OffsetSize _5d1fcb04;
 };
 
 constexpr VersionedOffsets AllVersions[] = {
@@ -65,7 +66,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .EventFlag = { 0x20111c, 0x800 },
         .Fg = { 0x415c08, 0x928 },
         .Hotel = { 0x110, 0x0 },
-        .HouseList = { 0x2dc348, 0x26400 },
+        .HouseList = { 0x2dc348, 0x132000 },
         .ItemMarketingRoute = { 0x416530, 0x2 },
         .Land = { 0x110, 0x4fac90 },
         .LandId = { 0x1d72f0, 0x1c },
@@ -92,6 +93,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .VillageScore = { 0x4f968c, 0x250 },
         .VisitorNpc = { 0x4159d8, 0x78 },
         .Weather = { 0x1d70c0, 0x14c },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x4f9b0c, 0x1286 },
     },
     {
         .revision_info = { 0x60001, 0x6000c, 0x2, 0x0, 2, 0xd },
@@ -102,7 +105,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .EventFlag = { 0x20c51c, 0x800 },
         .Fg = { 0x421048, 0x928 },
         .Hotel = { 0x110, 0x0 },
-        .HouseList = { 0x2e7748, 0x26400 },
+        .HouseList = { 0x2e7748, 0x132000 },
         .ItemMarketingRoute = { 0x421970, 0x2 },
         .Land = { 0x110, 0x5060d0 },
         .LandId = { 0x1e26f0, 0x1c },
@@ -129,6 +132,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .VillageScore = { 0x504acc, 0x250 },
         .VisitorNpc = { 0x420e18, 0x78 },
         .Weather = { 0x1e24c0, 0x14c },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x504f4c, 0x1286 },
     },
     {
         .revision_info = { 0x70001, 0x70006, 0x2, 0x0, 2, 0xf },
@@ -139,7 +144,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .EventFlag = { 0x20c51c, 0x800 },
         .Fg = { 0x421118, 0x928 },
         .Hotel = { 0x110, 0x0 },
-        .HouseList = { 0x2e7748, 0x26400 },
+        .HouseList = { 0x2e7748, 0x132000 },
         .ItemMarketingRoute = { 0x421a40, 0x2 },
         .Land = { 0x110, 0x5061a0 },
         .LandId = { 0x1e26f0, 0x1c },
@@ -166,6 +171,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .VillageScore = { 0x504b9c, 0x250 },
         .VisitorNpc = { 0x420ee8, 0x78 },
         .Weather = { 0x1e24c0, 0x14c },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x50501c, 0x1286 },
     },
     {
         .revision_info = { 0x74001, 0x74005, 0x2, 0x0, 2, 0x10 },
@@ -176,7 +183,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .EventFlag = { 0x20a518, 0x800 },
         .Fg = { 0x41f2e4, 0x928 },
         .Hotel = { 0x110, 0x0 },
-        .HouseList = { 0x2e5744, 0x26400 },
+        .HouseList = { 0x2e5744, 0x132000 },
         .ItemMarketingRoute = { 0x41fc0c, 0x2 },
         .Land = { 0x110, 0x504360 },
         .LandId = { 0x1e26f0, 0x1c },
@@ -203,6 +210,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .VillageScore = { 0x502d64, 0x250 },
         .VisitorNpc = { 0x41f0b4, 0x78 },
         .Weather = { 0x1e24c0, 0x14c },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x5031e4, 0x1286 },
     },
     {
         .revision_info = { 0x78001, 0x78001, 0x2, 0x0, 2, 0x11 },
@@ -213,7 +222,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .EventFlag = { 0x20a518, 0x800 },
         .Fg = { 0x41f2e4, 0x928 },
         .Hotel = { 0x110, 0x0 },
-        .HouseList = { 0x2e5744, 0x26400 },
+        .HouseList = { 0x2e5744, 0x132000 },
         .ItemMarketingRoute = { 0x41fc0c, 0x2 },
         .Land = { 0x110, 0x504360 },
         .LandId = { 0x1e26f0, 0x1c },
@@ -240,6 +249,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .VillageScore = { 0x502d64, 0x250 },
         .VisitorNpc = { 0x41f0b4, 0x78 },
         .Weather = { 0x1e24c0, 0x14c },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x5031e4, 0x1286 },
     },
     {
         .revision_info = { 0x7c001, 0x7c006, 0x2, 0x0, 2, 0x12 },
@@ -250,7 +261,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .EventFlag = { 0x22dab8, 0x800 },
         .Fg = { 0x442914, 0x928 },
         .Hotel = { 0x110, 0x0 },
-        .HouseList = { 0x308ce4, 0x26400 },
+        .HouseList = { 0x308ce4, 0x132000 },
         .ItemMarketingRoute = { 0x44323c, 0x2 },
         .Land = { 0x110, 0x527990 },
         .LandId = { 0x1e26f0, 0x1c },
@@ -277,6 +288,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .VillageScore = { 0x526394, 0x250 },
         .VisitorNpc = { 0x4426e4, 0x78 },
         .Weather = { 0x1e24c0, 0x14c },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x526814, 0x1286 },
     },
     {
         .revision_info = { 0x7d001, 0x7d004, 0x2, 0x0, 2, 0x13 },
@@ -287,7 +300,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .EventFlag = { 0x22dac8, 0x800 },
         .Fg = { 0x442924, 0x928 },
         .Hotel = { 0x110, 0x0 },
-        .HouseList = { 0x308cf4, 0x26400 },
+        .HouseList = { 0x308cf4, 0x132000 },
         .ItemMarketingRoute = { 0x44324c, 0x2 },
         .Land = { 0x110, 0x5279a0 },
         .LandId = { 0x1e2700, 0x1c },
@@ -314,6 +327,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .VillageScore = { 0x5263a4, 0x250 },
         .VisitorNpc = { 0x4426f4, 0x78 },
         .Weather = { 0x1e24d0, 0x14c },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x526824, 0x1286 },
     },
     {
         .revision_info = { 0x7e001, 0x7e001, 0x2, 0x0, 2, 0x14 },
@@ -324,7 +339,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .EventFlag = { 0x22dac8, 0x800 },
         .Fg = { 0x442924, 0x928 },
         .Hotel = { 0x110, 0x0 },
-        .HouseList = { 0x308cf4, 0x26400 },
+        .HouseList = { 0x308cf4, 0x132000 },
         .ItemMarketingRoute = { 0x44324c, 0x2 },
         .Land = { 0x110, 0x5279a0 },
         .LandId = { 0x1e2700, 0x1c },
@@ -351,6 +366,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .VillageScore = { 0x5263a4, 0x250 },
         .VisitorNpc = { 0x4426f4, 0x78 },
         .Weather = { 0x1e24d0, 0x14c },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x526824, 0x1286 },
     },
     {
         .revision_info = { 0x80009, 0x80085, 0x2, 0x0, 2, 0x16 },
@@ -361,7 +378,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .EventFlag = { 0x22ed00, 0x800 },
         .Fg = { 0x462388, 0x928 },
         .Hotel = { 0x110, 0x0 },
-        .HouseList = { 0x30a7cc, 0x28a28 },
+        .HouseList = { 0x30a7cc, 0x145140 },
         .ItemMarketingRoute = { 0x462cb0, 0x2 },
         .Land = { 0x110, 0x547410 },
         .LandId = { 0x1e3938, 0x1c },
@@ -388,6 +405,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .VillageScore = { 0x545e0c, 0x250 },
         .VisitorNpc = { 0x462158, 0x78 },
         .Weather = { 0x1e3700, 0x14c },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x54628c, 0x1286 },
     },
     {
         .revision_info = { 0xa0002, 0xa0028, 0x2, 0x0, 2, 0x1f },
@@ -398,7 +417,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .EventFlag = { 0x22ed00, 0x800 },
         .Fg = { 0x494870, 0x928 },
         .Hotel = { 0x578778, 0x3a348 },
-        .HouseList = { 0x33cbe0, 0x28a28 },
+        .HouseList = { 0x33cbe0, 0x145140 },
         .ItemMarketingRoute = { 0x495198, 0x2 },
         .Land = { 0x110, 0x5b3c40 },
         .LandId = { 0x1e3938, 0x1c },
@@ -425,6 +444,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .VillageScore = { 0x5782f4, 0x254 },
         .VisitorNpc = { 0x494624, 0x94 },
         .Weather = { 0x1e3700, 0x14c },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x5b2ac0, 0x1286 },
     },
 };
 } // Land
@@ -476,7 +497,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .ProfileMain = { 0x117b0, 0x234d0 },
         .SpecialityFruit = { 0x3480c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
-        ._5d1fcb04 = { 0x34c80, 0x1 },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x34c80, 0x4 },
     },
     {
         .revision_info = { 0x60001, 0x6000c, 0x2, 0x0, 2, 0xd },
@@ -499,7 +521,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
-        ._5d1fcb04 = { 0x35880, 0x1 },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x35880, 0x4 },
     },
     {
         .revision_info = { 0x70001, 0x70006, 0x2, 0x0, 2, 0xf },
@@ -522,7 +545,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
-        ._5d1fcb04 = { 0x35880, 0x1 },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x35880, 0x4 },
     },
     {
         .revision_info = { 0x74001, 0x74005, 0x2, 0x0, 2, 0x10 },
@@ -545,7 +569,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
-        ._5d1fcb04 = { 0x35880, 0x1 },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x35880, 0x4 },
     },
     {
         .revision_info = { 0x78001, 0x78001, 0x2, 0x0, 2, 0x11 },
@@ -568,7 +593,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
-        ._5d1fcb04 = { 0x35880, 0x1 },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x35880, 0x4 },
     },
     {
         .revision_info = { 0x7c001, 0x7c006, 0x2, 0x0, 2, 0x12 },
@@ -591,7 +617,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
-        ._5d1fcb04 = { 0x35880, 0x1 },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x35880, 0x4 },
     },
     {
         .revision_info = { 0x7d001, 0x7d004, 0x2, 0x0, 2, 0x13 },
@@ -614,7 +641,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
-        ._5d1fcb04 = { 0x35880, 0x1 },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x35880, 0x4 },
     },
     {
         .revision_info = { 0x7e001, 0x7e001, 0x2, 0x0, 2, 0x14 },
@@ -637,7 +665,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
-        ._5d1fcb04 = { 0x35880, 0x1 },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x35880, 0x4 },
     },
     {
         .revision_info = { 0x80009, 0x80085, 0x2, 0x0, 2, 0x16 },
@@ -660,7 +689,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .ProfileMain = { 0x123b0, 0x234d0 },
         .SpecialityFruit = { 0x3540c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
-        ._5d1fcb04 = { 0x35880, 0x1 },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x35880, 0x4 },
     },
     {
         .revision_info = { 0xa0002, 0xa0028, 0x2, 0x0, 2, 0x1f },
@@ -683,7 +713,8 @@ constexpr VersionedOffsets AllVersions[] = {
         .ProfileMain = { 0x13540, 0x234d0 },
         .SpecialityFruit = { 0x3659c, 0x8 },
         ._18fdb93f = { 0x120, 0x1 },
-        ._5d1fcb04 = { 0x36a10, 0x1 },
+        //_5d1fcb04 = 1562364676
+        ._5d1fcb04 = { 0x36a10, 0x4 },
     },
 };
 } // Player

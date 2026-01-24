@@ -53,7 +53,8 @@ constexpr FieldLandInfo main_fields_to_copy[] = {
     { "VillageScore", &Smmh::Land::VersionedOffsets::VillageScore },                                    // doesn't fit // changed in 3.0.0, added another float of unknown origin. null it.
     /*{ "NetLandProfile", &Smmh::Land::VersionedOffsets::NetLandProfile },*/                            //fits (after 1.4.0 aka dream update) //dont copy this
     { "SettlerQuest", &Smmh::Land::VersionedOffsets::SettlerQuest },                                    //introduced in 1.4.0 for some bizarro reason?
-    { "Hotel", &Smmh::Land::VersionedOffsets::Hotel },                                    //introduced in 3.0.0
+    { "Hotel", &Smmh::Land::VersionedOffsets::Hotel },                                                  //introduced in 3.0.0
+    { "_5d1fcb04", &Smmh::Land::VersionedOffsets::_5d1fcb04 },                                          //fits
 };
 
 constexpr FieldPlayerInfo personal_fields_to_copy[] = {

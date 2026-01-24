@@ -99,6 +99,7 @@ int main(int argc, char **argv)
                 {"NetLandProfile", {Calc_CEval("Land"), Calc_CEval("NetLandProfile")}},
                 {"SettlerQuest", {Calc_CEval("Land"), Calc_CEval("SettlerQuest")}},
                 {"Hotel", {Calc_CEval("Land"), Calc_CEval("Hotel")}},
+                {"_5d1fcb04", {Calc_CEval("Land"), 1562364676 /*_5d1fcb04*/ /*u8*/}},
             }
         },
         {
@@ -173,6 +174,10 @@ int main(int argc, char **argv)
                     << revision.unk2 << ", 0x" << revision.save_revision << " },\n";
                 for (const auto& [field_name, field_hashes]: group.fields)
                 {
+                    if (field_hashes.size() > 1 && field_hashes[1] == 1562364676)
+                    {
+                        out << "        //_5d1fcb04 = 1562364676\n";
+                    }
                     out << "        ." << field_name << " = { " << std::hex
                         << "0x" << byaml->CalcOffsets(group.field_type, field_hashes) << ", "
                         << "0x" << byaml->GetSize(group.field_type, field_hashes) << " },\n";

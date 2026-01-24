@@ -238,7 +238,7 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
             delete nullbuffer;
         }
         u8 house_level = 0;
-        util::read_data(main_buffer, main_yaml.PlayerHouseList.offset +  (i * main_yaml.HouseList.size), &house_level, sizeof(house_level));
+        util::read_data(main_buffer, main_yaml.PlayerHouseList.offset + (i * main_yaml.HouseList.size / 8), &house_level, sizeof(house_level));
         fix_player_(player_buffer, dream_buffer + dream_header_difference + dream_yaml.Land.size + (i * dream_player_yaml.Player.size), house_level, net_profile_buffer, profile_buffer);
         delete net_profile_buffer;
         delete profile_buffer;
