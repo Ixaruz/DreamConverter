@@ -30,12 +30,12 @@ constexpr FieldLandInfo main_fields_to_copy[] = {
     { "LandId", &Smmh::Land::VersionedOffsets::LandId },                                                //fits
     { "LandMyDesign", &Smmh::Land::VersionedOffsets::LandMyDesign },                                    //don't fit //handled by save_land_my_design.hpp //changed in 1.9.0
     { "EventFlag", &Smmh::Land::VersionedOffsets::EventFlag },                                          //fits
-    { "MainField", &Smmh::Land::VersionedOffsets::MainField },                                          //don't fit //handled by save_main_field.hpp //changed in 2.0.0
+    { "MainField", &Smmh::Land::VersionedOffsets::MainField },                                          //don't fit //handled by save_main_field.hpp //changed in 2.0.0 and 3.0.0
     { "PlayerHouseList", &Smmh::Land::VersionedOffsets::PlayerHouseList },                              //don't fit //handled by save_player_house_list.hpp //changed in 2.0.0
     { "NpcHouseList", &Smmh::Land::VersionedOffsets::NpcHouseList },                                    //don't fit //handled by save_npc_house_list.hpp //changed in 2.0.0
     { "Shop", &Smmh::Land::VersionedOffsets::Shop },                                                    //don't fit // all shops changed size; exception: ShopKabu; added ShopGardening, ShopGallery, ShopCommune //changed in 1.2.0; 1.5.0; 1.6.0; 1.7.0; 1.9.0; 2.0.0
     { "Museum", &Smmh::Land::VersionedOffsets::Museum },                                                //fits
-    { "VisitorNpc", &Smmh::Land::VersionedOffsets::VisitorNpc },                                        //fits
+    { "VisitorNpc", &Smmh::Land::VersionedOffsets::VisitorNpc },                                        // don't fit // added some player ID at the end, can be nulled I assume? we'll see
     { "SnowManFamily", &Smmh::Land::VersionedOffsets::SnowManFamily },                                  //fits
     { "Fg", &Smmh::Land::VersionedOffsets::Fg },                                                        //fits
     { "ItemMarketingRoute", &Smmh::Land::VersionedOffsets::ItemMarketingRoute },                        //fits
@@ -50,20 +50,21 @@ constexpr FieldLandInfo main_fields_to_copy[] = {
     { "RumorFavorite", &Smmh::Land::VersionedOffsets::RumorFavorite },                                  //fits
     { "PublicWorksLoan", &Smmh::Land::VersionedOffsets::PublicWorksLoan },                              //fits
     { "PublicWorksName", &Smmh::Land::VersionedOffsets::PublicWorksName },                              //fits
-    { "VillageScore", &Smmh::Land::VersionedOffsets::VillageScore },                                    //fits
+    { "VillageScore", &Smmh::Land::VersionedOffsets::VillageScore },                                    // doesn't fit // changed in 3.0.0, added another float of unknown origin. null it.
     /*{ "NetLandProfile", &Smmh::Land::VersionedOffsets::NetLandProfile },*/                            //fits (after 1.4.0 aka dream update) //dont copy this
     { "SettlerQuest", &Smmh::Land::VersionedOffsets::SettlerQuest },                                    //introduced in 1.4.0 for some bizarro reason?
+    { "Hotel", &Smmh::Land::VersionedOffsets::Hotel },                                    //introduced in 3.0.0
 };
 
 constexpr FieldPlayerInfo personal_fields_to_copy[] = {
     { "_18fdb93f", &Smmh::Player::VersionedOffsets::_18fdb93f },                                        //s8
-    { "LookPack", &Smmh::Player::VersionedOffsets::LookPack },
+    { "LookPack", &Smmh::Player::VersionedOffsets::LookPack },                                      //don't fit //changed in 3.0.0; added some other Outfit; can be nulled
     { "PlayerId", &Smmh::Player::VersionedOffsets::PlayerId },
     { "EventFlag", &Smmh::Player::VersionedOffsets::EventFlag },
     { "LifeSupport", &Smmh::Player::VersionedOffsets::LifeSupport },
     { "BirthDay", &Smmh::Player::VersionedOffsets::BirthDay },
     { "PastDaysFromMade", &Smmh::Player::VersionedOffsets::PastDaysFromMade },
-    // { "NetProfile", &Smmh::Player::VersionedOffsets::NetProfile },                                      //don't fit //changed in 2.0.0; size += 0x2 (+"PlannerID"), can be zero'd
+    // { "NetProfile", &Smmh::Player::VersionedOffsets::NetProfile },                                      //don't fit //changed in 2.0.0; size += 0x2 (+"PlannerID"), can be nulled
     { "ProfileMain", &Smmh::Player::VersionedOffsets::ProfileMain },
     { "_5d1fcb04", &Smmh::Player::VersionedOffsets::_5d1fcb04 }, //u8
     { "LastPlayDate", &Smmh::Player::VersionedOffsets::LastPlayDate },

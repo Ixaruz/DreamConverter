@@ -148,6 +148,11 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
         u64 field_offset = field_type->offset;
         u64 field_size = field_type->size;
 
+        // skip fields that don't exist in both version (Hotel)
+        if (dream_field_size == 0 || field_size == 0) {
+            continue;
+        }
+
         if(strcmp("NpcVillager", field.name) == 0)
         {
             auto npc = save_npc::get_save_npc(dream_buffer + dream_field_offset, dream_fhi.save_revision, main_fhi.save_revision);

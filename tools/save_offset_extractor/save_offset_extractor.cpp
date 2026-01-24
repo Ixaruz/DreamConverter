@@ -98,6 +98,7 @@ int main(int argc, char **argv)
                 {"VillageScore", {Calc_CEval("Land"), Calc_CEval("VillageScore")}},
                 {"NetLandProfile", {Calc_CEval("Land"), Calc_CEval("NetLandProfile")}},
                 {"SettlerQuest", {Calc_CEval("Land"), Calc_CEval("SettlerQuest")}},
+                {"Hotel", {Calc_CEval("Land"), Calc_CEval("Hotel")}},
             }
         },
         {

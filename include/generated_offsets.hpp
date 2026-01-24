@@ -25,6 +25,7 @@ struct VersionedOffsets {
     OffsetSize CampSite;
     OffsetSize EventFlag;
     OffsetSize Fg;
+    OffsetSize Hotel;
     OffsetSize HouseList;
     OffsetSize ItemMarketingRoute;
     OffsetSize Land;
@@ -63,6 +64,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .CampSite = { 0x4f7040, 0x4 },
         .EventFlag = { 0x20111c, 0x800 },
         .Fg = { 0x415c08, 0x928 },
+        .Hotel = { 0x110, 0x0 },
         .HouseList = { 0x2dc348, 0x26400 },
         .ItemMarketingRoute = { 0x416530, 0x2 },
         .Land = { 0x110, 0x4fac90 },
@@ -99,6 +101,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .CampSite = { 0x502480, 0x4 },
         .EventFlag = { 0x20c51c, 0x800 },
         .Fg = { 0x421048, 0x928 },
+        .Hotel = { 0x110, 0x0 },
         .HouseList = { 0x2e7748, 0x26400 },
         .ItemMarketingRoute = { 0x421970, 0x2 },
         .Land = { 0x110, 0x5060d0 },
@@ -135,6 +138,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .CampSite = { 0x502550, 0x4 },
         .EventFlag = { 0x20c51c, 0x800 },
         .Fg = { 0x421118, 0x928 },
+        .Hotel = { 0x110, 0x0 },
         .HouseList = { 0x2e7748, 0x26400 },
         .ItemMarketingRoute = { 0x421a40, 0x2 },
         .Land = { 0x110, 0x5061a0 },
@@ -171,6 +175,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .CampSite = { 0x500718, 0x4 },
         .EventFlag = { 0x20a518, 0x800 },
         .Fg = { 0x41f2e4, 0x928 },
+        .Hotel = { 0x110, 0x0 },
         .HouseList = { 0x2e5744, 0x26400 },
         .ItemMarketingRoute = { 0x41fc0c, 0x2 },
         .Land = { 0x110, 0x504360 },
@@ -207,6 +212,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .CampSite = { 0x500718, 0x4 },
         .EventFlag = { 0x20a518, 0x800 },
         .Fg = { 0x41f2e4, 0x928 },
+        .Hotel = { 0x110, 0x0 },
         .HouseList = { 0x2e5744, 0x26400 },
         .ItemMarketingRoute = { 0x41fc0c, 0x2 },
         .Land = { 0x110, 0x504360 },
@@ -243,6 +249,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .CampSite = { 0x523d48, 0x4 },
         .EventFlag = { 0x22dab8, 0x800 },
         .Fg = { 0x442914, 0x928 },
+        .Hotel = { 0x110, 0x0 },
         .HouseList = { 0x308ce4, 0x26400 },
         .ItemMarketingRoute = { 0x44323c, 0x2 },
         .Land = { 0x110, 0x527990 },
@@ -279,6 +286,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .CampSite = { 0x523d58, 0x4 },
         .EventFlag = { 0x22dac8, 0x800 },
         .Fg = { 0x442924, 0x928 },
+        .Hotel = { 0x110, 0x0 },
         .HouseList = { 0x308cf4, 0x26400 },
         .ItemMarketingRoute = { 0x44324c, 0x2 },
         .Land = { 0x110, 0x5279a0 },
@@ -315,6 +323,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .CampSite = { 0x523d58, 0x4 },
         .EventFlag = { 0x22dac8, 0x800 },
         .Fg = { 0x442924, 0x928 },
+        .Hotel = { 0x110, 0x0 },
         .HouseList = { 0x308cf4, 0x26400 },
         .ItemMarketingRoute = { 0x44324c, 0x2 },
         .Land = { 0x110, 0x5279a0 },
@@ -351,6 +360,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .CampSite = { 0x5437c0, 0x4 },
         .EventFlag = { 0x22ed00, 0x800 },
         .Fg = { 0x462388, 0x928 },
+        .Hotel = { 0x110, 0x0 },
         .HouseList = { 0x30a7cc, 0x28a28 },
         .ItemMarketingRoute = { 0x462cb0, 0x2 },
         .Land = { 0x110, 0x547410 },
@@ -387,6 +397,7 @@ constexpr VersionedOffsets AllVersions[] = {
         .CampSite = { 0x575ca8, 0x4 },
         .EventFlag = { 0x22ed00, 0x800 },
         .Fg = { 0x494870, 0x928 },
+        .Hotel = { 0x578778, 0x3a348 },
         .HouseList = { 0x33cbe0, 0x28a28 },
         .ItemMarketingRoute = { 0x495198, 0x2 },
         .Land = { 0x110, 0x5b3c40 },
