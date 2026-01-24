@@ -23,8 +23,7 @@ struct FieldPlayerInfo {
 
 constexpr FieldLandInfo main_fields_to_copy[] = {
     { "NpcVillager", &Smmh::Land::VersionedOffsets::NpcVillager },                                      //don't fit //handled by save_npc.hpp
-    // Don't copy to keep account linkage
-    // { "PlayerVillagerAccountTable", &Smmh::Land::VersionedOffsets::PlayerVillagerAccountTable },        //fits
+    { "PlayerVillagerAccountTable", &Smmh::Land::VersionedOffsets::PlayerVillagerAccountTable },        //fits
     { "Weather", &Smmh::Land::VersionedOffsets::Weather },                                              //fits
     { "LandTime", &Smmh::Land::VersionedOffsets::LandTime },                                            //don't fit //handled by save_land_time.hpp //changed in 2.0.0
     { "LandId", &Smmh::Land::VersionedOffsets::LandId },                                                //fits
@@ -51,7 +50,7 @@ constexpr FieldLandInfo main_fields_to_copy[] = {
     { "PublicWorksLoan", &Smmh::Land::VersionedOffsets::PublicWorksLoan },                              //fits
     { "PublicWorksName", &Smmh::Land::VersionedOffsets::PublicWorksName },                              //fits
     { "VillageScore", &Smmh::Land::VersionedOffsets::VillageScore },                                    // doesn't fit // changed in 3.0.0, added another float of unknown origin. null it.
-    /*{ "NetLandProfile", &Smmh::Land::VersionedOffsets::NetLandProfile },*/                            //fits (after 1.4.0 aka dream update) //dont copy this
+    { "NetLandProfile", &Smmh::Land::VersionedOffsets::NetLandProfile },                                //fits (after 1.4.0 aka dream update) //dont copy this
     { "SettlerQuest", &Smmh::Land::VersionedOffsets::SettlerQuest },                                    //introduced in 1.4.0 for some bizarro reason?
     { "Hotel", &Smmh::Land::VersionedOffsets::Hotel },                                                  //introduced in 3.0.0
     { "_5d1fcb04", &Smmh::Land::VersionedOffsets::_5d1fcb04 },                                          //fits
@@ -65,7 +64,7 @@ constexpr FieldPlayerInfo personal_fields_to_copy[] = {
     { "LifeSupport", &Smmh::Player::VersionedOffsets::LifeSupport },
     { "BirthDay", &Smmh::Player::VersionedOffsets::BirthDay },
     { "PastDaysFromMade", &Smmh::Player::VersionedOffsets::PastDaysFromMade },
-    // { "NetProfile", &Smmh::Player::VersionedOffsets::NetProfile },                                      //don't fit //changed in 2.0.0; size += 0x2 (+"PlannerID"), can be nulled
+    { "NetProfile", &Smmh::Player::VersionedOffsets::NetProfile },                                      //don't fit //changed in 2.0.0; size += 0x2 (+"PlannerID"), can be nulled
     { "ProfileMain", &Smmh::Player::VersionedOffsets::ProfileMain },
     { "_5d1fcb04", &Smmh::Player::VersionedOffsets::_5d1fcb04 }, //u8
     { "LastPlayDate", &Smmh::Player::VersionedOffsets::LastPlayDate },

@@ -191,11 +191,33 @@ void convert_dream::copy_data_(fs::path &out_path, fs::path &dream_file_path) {
         }
         else
         {
+            bool is_account_table = strcmp("PlayerVillagerAccountTable", field.name) == 0;
+            u8 *account_table_buffer = nullptr;
+
+            if(is_account_table)
+            {
+                // preserve account linkage by writing old AccountUID back
+                account_table_buffer = new u8[field_size]{0};
+                util::read_data(main_buffer, field_offset, account_table_buffer, field_size);
+            }
+
             u8 *nullbuffer = new u8[field_size]{0};
             // override with zeros first (in case the field we are writing is smaller than the input field)
             util::write_data(main_buffer, field_offset, nullbuffer, field_size);
             // write as much data as we can get from the dream_buffer (min value between the two struct sizes)
             util::write_data(main_buffer, field_offset, dream_buffer + dream_field_offset, min(field_size, dream_field_size));
+
+            // restore old AccountUIDs abut not the PlayerIds, as the game obviously needs those...
+            if(is_account_table)
+            {
+                for (u8 i = 0; i < 8; i++) {
+                    if (!g_players[i]) continue;
+                    u64 account_uid_offset = i * 0x48; // AccountTable Size
+                    util::write_data(main_buffer, field_offset + account_uid_offset, account_table_buffer + account_uid_offset, 0x10);
+                }
+                delete account_table_buffer;
+            }
+
             delete nullbuffer;
         }
     }
