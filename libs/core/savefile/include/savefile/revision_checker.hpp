@@ -79,6 +79,7 @@ namespace revision_checker{
         file_header_info { 0x80009, 0x80085, 2, 0, 2, 29 }, // 2.0.7
         file_header_info { 0x80009, 0x80085, 2, 0, 2, 30 }, // 2.0.8
         file_header_info { 0xA0002, 0xA0028, 2, 0, 2, 31 }, // 3.0.0
+        file_header_info { 0xA0002, 0xA0028, 2, 0, 2, 32 }, // 3.0.1
     };
 
     inline static file_header_info get_revision_info_by_save_revision(int revision) {
@@ -119,6 +120,7 @@ namespace revision_checker{
         sizes_by_revision[12], // 2.0.7
         sizes_by_revision[12], // 2.0.8
         sizes_by_revision[13], // 3.0.0
+        sizes_by_revision[13], // 3.0.1
     };
 
     static std::vector<file_hash_info> hash_info = std::vector<file_hash_info>
@@ -155,5 +157,6 @@ namespace revision_checker{
         REV_200, // 2.0.7
         REV_200, // 2.0.8
         REV_300, // 3.0.0
+        REV_300, // 3.0.1
     };
 }
